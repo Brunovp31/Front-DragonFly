@@ -13,9 +13,7 @@ export default function Header() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  const role = user.role.map((r: any) => r.authority);
 
   return (
     <div className="flex justify-between px-6 pt-5">
@@ -32,7 +30,7 @@ export default function Header() {
                 src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfIPFwQgaGGCj37FXKA6qkmXL7z8N7aYPLkw&s",
               }}
               className="transition-transform"
-              description={user.sub}
+              description={role}
               name={user.fullName}
             />
           </DropdownTrigger>
