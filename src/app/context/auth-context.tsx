@@ -18,6 +18,13 @@ const AuthContext = createContext<AuthContextProps>({
 
 export const useAuth = () => useContext(AuthContext);
 
+const rolesAndPermissions: any = {
+  ADMIN: ["/*"],
+  WORKER: ["/dashboard", "/dashboard/categories", "/dashboard/products"],
+  DELIVERY: [],
+  GARDENER: [],
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -30,21 +37,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const token = localStorage.getItem("token");
     if (token) {
       // TODO: Validar token con el backend
-
       const decodedToken = JSON.parse(atob(token.split(".")[1]));
 
-      if (
-        pathName.startsWith("/dashboard") &&
-        (!decodedToken.role ||
-          !Array.isArray(decodedToken.role) ||
-          !decodedToken.role.some((r: any) => r.authority === "ADMIN"))
-      ) {
-        router.push("/");
+      const userRoles = decodedToken.role?.map((r: any) => r.authority) || [];
+
+      // Verificar si el usuario tiene permiso para la ruta actual
+      const hasPermission = userRoles.some((role: string) => {
+        const allowedRoutes = rolesAndPermissions[role];
+        return allowedRoutes.includes("/*") || allowedRoutes.includes(pathName);
+      });
+
+      if (!hasPermission && pathName.startsWith("/dashboard")) {
+        router.push("/dashboard");
+      } else {
+        setUser({ token, ...decodedToken });
       }
-      setUser({ token, ...decodedToken });
     }
     setLoading(false);
-  }, [router]);
+  }, [router, pathName]);
 
   const loginAuth = async (username: string, password: string) => {
     try {
@@ -55,15 +65,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("token", response);
       const decodedToken = JSON.parse(atob(response.split(".")[1]));
       setUser({ token: response, ...decodedToken });
-      if (
-        decodedToken.role &&
-        Array.isArray(decodedToken.role) &&
-        decodedToken.role.some((r: any) => r.authority === "ADMIN")
-      ) {
-        router.push("/dashboard/products");
-      } else {
-        router.push("/");
-      }
+      const defaultRoute = decodedToken.role.some(
+        (r: any) => r.authority === "ADMIN"
+      )
+        ? "/dashboard/products"
+        : "/";
+      router.push(defaultRoute);
     } catch (error) {
       console.error("Error during login:", error);
     }

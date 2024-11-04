@@ -181,7 +181,7 @@ export default function NavbarCustom({
                       Perfil
                     </div>
                   </DropdownItem>
-                  {user.role.some((r: any) => r.authority === "ADMIN") && (
+                  {user.role.some((r: any) => r.authority !== "USER") && (
                     <DropdownItem
                       key="dashboard"
                       onClick={() => router.push("/dashboard/products")}
