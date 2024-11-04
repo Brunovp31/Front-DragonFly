@@ -39,6 +39,9 @@ export default function UsersDashboard() {
   const statusColorMap = {
     ADMIN: "warning",
     USER: "success",
+    DELIVERY: "info",
+    WORKER: "error",
+    GARDENER: "error",
   } as any;
 
   const renderCell = useCallback((user: any, columnKey: any) => {

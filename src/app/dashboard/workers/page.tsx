@@ -39,8 +39,11 @@ export default function WorkersDashboard() {
   }, []);
 
   const statusColorMap = {
-    MANAGER: "warning",
-    WORKER: "success",
+    ADMIN: "warning",
+    USER: "success",
+    DELIVERY: "info",
+    WORKER: "error",
+    GARDENER: "error",
   } as any;
 
   const renderCell = useCallback((worker: any, columnKey: any) => {
