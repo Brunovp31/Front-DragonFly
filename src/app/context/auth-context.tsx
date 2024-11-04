@@ -22,7 +22,7 @@ const rolesAndPermissions: any = {
   ADMIN: ["/*"],
   WORKER: ["/dashboard", "/dashboard/categories", "/dashboard/products"],
   DELIVERY: [],
-  GARDENER: [],
+  GARDENER: ["/dashboard", "/dashboard/productions"],
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -36,19 +36,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // TODO: Validar token con el backend
       const decodedToken = JSON.parse(atob(token.split(".")[1]));
-
       const userRoles = decodedToken.role?.map((r: any) => r.authority) || [];
-
-      // Verificar si el usuario tiene permiso para la ruta actual
       const hasPermission = userRoles.some((role: string) => {
         const allowedRoutes = rolesAndPermissions[role];
         return allowedRoutes.includes("/*") || allowedRoutes.includes(pathName);
       });
 
       if (!hasPermission && pathName.startsWith("/dashboard")) {
-        router.push("/dashboard");
+        router.push("/");
       } else {
         setUser({ token, ...decodedToken });
       }
@@ -65,11 +61,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("token", response);
       const decodedToken = JSON.parse(atob(response.split(".")[1]));
       setUser({ token: response, ...decodedToken });
+
       const defaultRoute = decodedToken.role.some(
-        (r: any) => r.authority === "ADMIN"
+        (r: any) => r.authority !== "USER"
       )
-        ? "/dashboard/products"
+        ? "/dashboard"
         : "/";
+
       router.push(defaultRoute);
     } catch (error) {
       console.error("Error during login:", error);

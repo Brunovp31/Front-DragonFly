@@ -181,10 +181,10 @@ export default function NavbarCustom({
                       Perfil
                     </div>
                   </DropdownItem>
-                  {user.role.some((r: any) => r.authority !== "USER") && (
+                  {user.role.some((r: any) => r.authority != "USER") && (
                     <DropdownItem
                       key="dashboard"
-                      onClick={() => router.push("/dashboard/products")}
+                      onClick={() => router.push("/dashboard/")}
                     >
                       <div className="flex items-center gap-x-2">
                         <RxDashboard
