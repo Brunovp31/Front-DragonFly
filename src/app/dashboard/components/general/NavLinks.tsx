@@ -47,6 +47,12 @@ const links = [
     icon: MdProductionQuantityLimits,
     permit: ["GARDENER", "ADMIN"],
   },
+  {
+    name: "Deliveries",
+    href: "/dashboard/deliveries",
+    icon: MdProductionQuantityLimits,
+    permit: ["DELIVERY", "ADMIN"],
+  },
 ];
 
 export default function NavLinks() {

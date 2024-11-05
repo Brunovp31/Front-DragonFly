@@ -25,7 +25,7 @@ export const useAuth = () => useContext(AuthContext);
 const rolesAndPermissions: any = {
   ADMIN: ["/*"],
   WORKER: ["/dashboard", "/dashboard/categories", "/dashboard/products"],
-  DELIVERY: [],
+  DELIVERY: ["/dashboard", "/dashboard/deliveries"],
   GARDENER: ["/dashboard", "/dashboard/productions"],
 };
 
