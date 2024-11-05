@@ -27,7 +27,7 @@ export default function Header() {
               as="button"
               avatarProps={{
                 isBordered: true,
-                src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfIPFwQgaGGCj37FXKA6qkmXL7z8N7aYPLkw&s",
+                src: "https://www.disfrazzes.com/blog/wp-content/uploads/2016/01/disfraz-del-negro-del-whatsapp-880x660.jpg",
               }}
               className="transition-transform"
               description={role}

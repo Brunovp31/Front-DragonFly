@@ -37,7 +37,7 @@ export default function Dashboard() {
       >
         <div>
           <motion.h1
-            className="text-4xl font-bold text-gray-800"
+            className="text-3xl font-bold text-gray-800"
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -109,7 +109,7 @@ export default function Dashboard() {
             Productos
           </motion.h2>
           <motion.p
-            className="text-4xl font-bold text-green-600"
+            className="text-2xl font-bold"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -160,28 +160,28 @@ export default function Dashboard() {
           <motion.img
             src="https://elcronista.co/assets/media/el-negro-del-whatsapp-montaje-o-realidad.jpg"
             alt="Anturio"
-            className="w-full h-32 object-cover rounded-lg shadow-md"
+            className="w-full h-72 object-cover rounded-lg shadow-md"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           />
           <motion.img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvhZO2pLTsLmHVkqH3cZFwuq_ljbLbroDX1g&s"
             alt="Orquídea"
-            className="w-full h-32 object-cover rounded-lg shadow-md"
+            className="w-full h-72 object-cover rounded-lg shadow-md"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           />
           <motion.img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWM0Sd1s7zKZNDkr59XNirT-puYVg9HtaG_Q&s"
             alt="Flor variada"
-            className="w-full h-32 object-cover rounded-lg shadow-md"
+            className="w-full h-72 object-cover rounded-lg shadow-md"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           />
           <motion.img
             src="https://i.ytimg.com/vi/qd68NBQQeRs/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGEggWChlMA8=&rs=AOn4CLBrdaXLjsF9oOyLUENmbIg4rj6Feg"
             alt="Tienda de flores"
-            className="w-full h-32 object-cover rounded-lg shadow-md"
+            className="w-full h-72 object-cover rounded-lg shadow-md"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           />
