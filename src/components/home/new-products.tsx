@@ -1,9 +1,22 @@
 "use client";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
+import { getTop4Products } from "@/services/product-service";
 
 export default function NewProducts() {
+  const [data, setData] = React.useState([]);
+  useEffect(() => {
+    const fetchNewProducts = async () => {
+      try {
+        const data = await getTop4Products();
+        setData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchNewProducts();
+  }, []);
   const list = [
     {
       title: "Orange",
@@ -42,25 +55,23 @@ export default function NewProducts() {
           className="border-2 border-gray-200 rounded-md shadow-sm"
         />
         <div className="h-full w-1/2 gap-2 grid grid-cols-2 sm:grid-cols-2">
-          {list.map((item, index) => (
+          {data.map((item: any, index) => (
             <Card
               shadow="sm"
               key={index}
               isPressable
               onPress={() => console.log("item pressed")}
             >
-              <CardBody className="overflow-visible p-0">
-                <Image
-                  alt={item.title}
-                  width={200}
-                  height={140}
-                  className="w-full object-cover shadow-sm rounded-t-md"
-                  src={item.img}
+              <CardBody className="overflow-visible p-5">
+                <img
+                  alt={item.name}
+                  className="object-cover shadow-sm rounded-t-md h-36 w-48 "
+                  src={item.image}
                 />
               </CardBody>
               <CardFooter className="text-small justify-between">
-                <b>{item.title}</b>
-                <p className="text-default-500">{item.price}</p>
+                <b>{item.name}</b>
+                <p className="text-default-500">S/.{item.price}</p>
               </CardFooter>
             </Card>
           ))}

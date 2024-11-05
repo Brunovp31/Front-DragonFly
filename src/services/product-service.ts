@@ -80,3 +80,16 @@ export const deleteProduct = async (id: string) => {
     throw error;
   }
 };
+// /products/top4
+export const getTop4Products = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/products/top4`, {
+      headers: {},
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener datos de productos:", error);
+    throw error;
+  }
+}
