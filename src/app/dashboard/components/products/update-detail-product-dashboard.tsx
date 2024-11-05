@@ -1,5 +1,6 @@
 import { getAllCategories } from "@/services/categories-service";
 import { getProductById, updateProduct } from "@/services/product-service";
+import FlowerSpinner from "@/utils/icons/FlowerSpinner";
 import {
   Button,
   Input,
@@ -29,29 +30,27 @@ export default function UpdateDetailProduct({
   const [product, setProduct] = useState({} as any);
   const [categories, setCategories] = useState([] as any);
   const [categoryId, setCategoryId] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (open) {
-      const fetchProduct = async () => {
+      const fetchData = async () => {
+        setIsLoading(true);
         try {
-          const data = await getProductById(id);
-          setProduct(data);
-          setCategoryId(data.category.id);
+          const productData = await getProductById(id);
+          setProduct(productData);
+          setCategoryId(productData.category.id);
+
+          const categoriesData = await getAllCategories();
+          setCategories(categoriesData);
         } catch (error) {
           console.error(error);
+        } finally {
+          setIsLoading(false);
         }
       };
 
-      const fetchCategories = async () => {
-        try {
-          const data = await getAllCategories();
-          setCategories(data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchProduct();
-      fetchCategories();
+      fetchData();
     }
   }, [open, id]);
 
@@ -87,182 +86,181 @@ export default function UpdateDetailProduct({
         size="3xl"
       >
         <ModalContent>
-          {(closeModal) => (
-            <>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (type === "update") {
-                    handleUpdateProduct(e);
-                  }
-                  closeModal();
-                }}
-              >
-                <ModalHeader className="flex flex-col gap-1">
-                  {type === "update" ? "Actualizar" : "Detalles de "} producto
-                </ModalHeader>
-                <ModalBody>
-                  <div className="flex gap-x-2">
-                    {/* Nombre */}
-                    <Input
-                      isDisabled={type === "details"}
-                      type="text"
-                      name="name"
-                      label="Nombre"
-                      isRequired
-                      value={product.name || ""}
-                      onChange={handleInputChange}
-                    />
-
-                    {/* Descripción */}
-                    <Input
-                      isDisabled={type === "details"}
-                      type="textarea"
-                      name="description"
-                      label="Descripción"
-                      isRequired
-                      value={product.description || ""}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className="flex gap-x-2">
-                    {/* Precio */}
-                    <Input
-                      isDisabled={type === "details"}
-                      label="Precio"
-                      name="price"
-                      placeholder="0.00"
-                      type="number"
-                      startContent={
-                        <div className="pointer-events-none flex items-center">
-                          <span className="text-default-400 text-small">$</span>
-                        </div>
-                      }
-                      isRequired
-                      value={product.price || ""}
-                      onChange={handleInputChange}
-                    />
-
-                    {/* Stock */}
-                    <Input
-                      isDisabled={type === "details"}
-                      label="Stock"
-                      name="stock"
-                      type="number"
-                      placeholder="0"
-                      isRequired
-                      value={product.stock || ""}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className="flex gap-x-2">
-                    {/* Categoría */}
-                    <Select
-                      isDisabled={type === "details"}
-                      label="Categoría"
-                      selectedKeys={categoryId ? [categoryId] : []}
-                      onSelectionChange={handleCategoryChange}
-                      name="category"
-                      isRequired
-                    >
-                      {categories.map((category: any) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </Select>
-
-                    {/* Color */}
-                    <Input
-                      isDisabled={type === "details"}
-                      label="Color"
-                      name="color"
-                      placeholder="Ejemplo: Verde"
-                      isRequired
-                      value={product.color || ""}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  {/* Tipo de Planta */}
+          {isLoading ? (
+            <FlowerSpinner />
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (type === "update") {
+                  handleUpdateProduct(e);
+                }
+              }}
+            >
+              <ModalHeader className="flex flex-col gap-1">
+                {type === "update" ? "Actualizar" : "Detalles de "} producto
+              </ModalHeader>
+              <ModalBody>
+                <div className="flex gap-x-2">
+                  {/* Nombre */}
                   <Input
                     isDisabled={type === "details"}
-                    label="Tipo de planta"
-                    name="plantType"
-                    placeholder="Ejemplo: Suculenta"
+                    type="text"
+                    name="name"
+                    label="Nombre"
                     isRequired
-                    value={product.plantType || ""}
+                    value={product.name || ""}
                     onChange={handleInputChange}
                   />
 
-                  {/* Descuento */}
+                  {/* Descripción */}
                   <Input
                     isDisabled={type === "details"}
-                    label="Descuento"
-                    name="discount"
+                    type="textarea"
+                    name="description"
+                    label="Descripción"
+                    isRequired
+                    value={product.description || ""}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div className="flex gap-x-2">
+                  {/* Precio */}
+                  <Input
+                    isDisabled={type === "details"}
+                    label="Precio"
+                    name="price"
                     placeholder="0.00"
                     type="number"
-                    isRequired
-                    value={product.discount || ""}
-                    onChange={handleInputChange}
                     startContent={
                       <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">%</span>
+                        <span className="text-default-400 text-small">$</span>
                       </div>
                     }
-                  />
-
-                  {/* SKU */}
-                  <Input
-                    isDisabled
-                    label="SKU"
-                    name="sku"
-                    placeholder="Ejemplo: 123456"
-                    description="El SKU es un código único para cada producto. Autogenerado."
-                    isReadOnly
-                    defaultValue={product.sku || ""}
-                  />
-
-                  {/* Imagen */}
-                  <Input
-                    isDisabled={type === "details"}
-                    name="image"
-                    description={
-                      type === "details"
-                        ? "Imagen de producto"
-                        : "Selecciona una imagen para tu producto."
-                    }
-                    value={product.image || ""}
+                    isRequired
+                    value={product.price || ""}
                     onChange={handleInputChange}
                   />
 
-                  {/* Imagen Hover */}
+                  {/* Stock */}
                   <Input
                     isDisabled={type === "details"}
-                    name="imageHover"
-                    description={
-                      type === "details"
-                        ? "Imagen de hover"
-                        : "Selecciona una imagen para tu producto."
-                    }
-                    value={product.imageHover || ""}
+                    label="Stock"
+                    name="stock"
+                    type="number"
+                    placeholder="0"
+                    isRequired
+                    value={product.stock || ""}
                     onChange={handleInputChange}
                   />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    Cerrar
+                </div>
+
+                <div className="flex gap-x-2">
+                  {/* Categoría */}
+                  <Select
+                    isDisabled={type === "details"}
+                    label="Categoría"
+                    selectedKeys={categoryId ? [categoryId] : []}
+                    onSelectionChange={handleCategoryChange}
+                    name="category"
+                    isRequired
+                  >
+                    {categories.map((category: any) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
+
+                  {/* Color */}
+                  <Input
+                    isDisabled={type === "details"}
+                    label="Color"
+                    name="color"
+                    placeholder="Ejemplo: Verde"
+                    isRequired
+                    value={product.color || ""}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                {/* Tipo de Planta */}
+                <Input
+                  isDisabled={type === "details"}
+                  label="Tipo de planta"
+                  name="plantType"
+                  placeholder="Ejemplo: Suculenta"
+                  isRequired
+                  value={product.plantType || ""}
+                  onChange={handleInputChange}
+                />
+
+                {/* Descuento */}
+                <Input
+                  isDisabled={type === "details"}
+                  label="Descuento"
+                  name="discount"
+                  placeholder="0.00"
+                  type="number"
+                  isRequired
+                  value={product.discount || ""}
+                  onChange={handleInputChange}
+                  startContent={
+                    <div className="pointer-events-none flex items-center">
+                      <span className="text-default-400 text-small">%</span>
+                    </div>
+                  }
+                />
+
+                {/* SKU */}
+                <Input
+                  isDisabled
+                  label="SKU"
+                  name="sku"
+                  placeholder="Ejemplo: 123456"
+                  description="El SKU es un código único para cada producto. Autogenerado."
+                  isReadOnly
+                  defaultValue={product.sku || ""}
+                />
+
+                {/* Imagen */}
+                <Input
+                  isDisabled={type === "details"}
+                  name="image"
+                  description={
+                    type === "details"
+                      ? "Imagen de producto"
+                      : "Selecciona una imagen para tu producto."
+                  }
+                  value={product.image || ""}
+                  onChange={handleInputChange}
+                />
+
+                {/* Imagen Hover */}
+                <Input
+                  isDisabled={type === "details"}
+                  name="imageHover"
+                  description={
+                    type === "details"
+                      ? "Imagen de hover"
+                      : "Selecciona una imagen para tu producto."
+                  }
+                  value={product.imageHover || ""}
+                  onChange={handleInputChange}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cerrar
+                </Button>
+                {type === "update" && (
+                  <Button color="success" type="submit">
+                    Actualizar
                   </Button>
-                  {type === "update" && (
-                    <Button color="success" type="submit">
-                      Actualizar
-                    </Button>
-                  )}
-                </ModalFooter>
-              </form>
-            </>
+                )}
+              </ModalFooter>
+            </form>
           )}
         </ModalContent>
       </Modal>
