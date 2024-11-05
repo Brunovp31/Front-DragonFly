@@ -15,7 +15,7 @@ import { useCart } from "../context/cart-context";
 import { useState } from "react";
 import Map from "@/components/google-map";
 
-const documentRules = {
+const documentRules: any = {
   DNI: 8,
   RUC: 11,
   "Carnet de extranjería": 12,
@@ -45,6 +45,7 @@ export default function ShoppingCart() {
     documentNumber: false,
     deliveryDate: false,
     deliveryTime: false,
+    documentType: false,
   });
 
   const documentTypes = ["DNI", "RUC", "Carnet de extranjería", "Pasaporte"];
@@ -69,7 +70,9 @@ export default function ShoppingCart() {
       const docType = customerDetails.documentType;
       const maxLength = documentRules[docType];
       if (value.length > maxLength) return;
-      setDocError(value.length !== maxLength ? `Debe tener ${maxLength} caracteres` : "");
+      setDocError(
+        value.length !== maxLength ? `Debe tener ${maxLength} caracteres` : ""
+      );
     }
 
     setCustomerDetails((prevDetails) => ({
@@ -80,7 +83,8 @@ export default function ShoppingCart() {
     // Check if field is required and mark as invalid if empty
     setFieldErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: !value && (name !== "documentNumber" || customerDetails.documentType),
+      [name]:
+        !value && (name !== "documentNumber" || customerDetails.documentType),
     }));
   };
 
@@ -121,9 +125,9 @@ export default function ShoppingCart() {
     setIsValid(isValid);
     return isValid;
   };
-  
+
   const handleProceedToPayment = () => {
-   window.open("https://mpago.la/2k1anq8","_self")
+    window.open("https://mpago.la/2k1anq8", "_self");
     // const valid = validateForm();
     // if (valid) {
     //   alert("Formulario válido. Procediendo al pago...");
@@ -195,12 +199,16 @@ export default function ShoppingCart() {
                 required
                 className={fieldErrors.documentType ? "border-red-500" : ""}
               >
-                <SelectItem value="">Seleccionar...</SelectItem>
-                {documentTypes.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type}
-                  </SelectItem>
-                ))}
+                <SelectItem key="" value="">
+                  Seleccionar...
+                </SelectItem>
+                <>
+                  {documentTypes.map((type: any) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </>
               </Select>
               <Input
                 label="Número de Documento"
@@ -232,12 +240,16 @@ export default function ShoppingCart() {
                 required
                 className={fieldErrors.deliveryTime ? "border-red-500" : ""}
               >
-                <SelectItem value="">Seleccionar...</SelectItem>
-                {timeOptions.map((time) => (
-                  <SelectItem key={time} value={time}>
-                    {time}
-                  </SelectItem>
-                ))}
+                <SelectItem key={""} value="">
+                  Seleccionar...
+                </SelectItem>
+                <>
+                  {timeOptions.map((time) => (
+                    <SelectItem key={time} value={time}>
+                      {time}
+                    </SelectItem>
+                  ))}
+                </>
               </Select>
             </div>
           </form>
@@ -273,7 +285,7 @@ export default function ShoppingCart() {
                     <Input
                       type="number"
                       min={0}
-                      value={item.quantity}
+                      value={String(item.quantity)}
                       onChange={(e) => {
                         const newQuantity = Number(e.target.value);
                         updateQuantity(item.id, newQuantity);
@@ -288,7 +300,10 @@ export default function ShoppingCart() {
                   </TableCell>
                   <TableCell>S/. {item.productPrice.toFixed(2)}</TableCell>
                   <TableCell>
-                    <Button color="error" onClick={() => removeFromCart(item.id)}>
+                    <Button
+                      color="danger"
+                      onClick={() => removeFromCart(item.id)}
+                    >
                       Eliminar
                     </Button>
                   </TableCell>
@@ -311,7 +326,6 @@ export default function ShoppingCart() {
             Proceder al Pago
           </Button>
         </div>
-
       </div>
       <Map />
     </div>
