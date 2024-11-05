@@ -78,17 +78,23 @@ export default function UpdateDetailProduct({
 
   return (
     <>
-      <Modal
-        isOpen={open}
-        onOpenChange={(isOpen) => {
-          if (!isOpen) onClose();
-        }}
-        size="3xl"
-      >
-        <ModalContent>
-          {isLoading ? (
-            <FlowerSpinner />
-          ) : (
+      {/* Loader en pantalla completa */}
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+          <FlowerSpinner />
+        </div>
+      )}
+
+      {/* Modal que solo se abre cuando isLoading es false */}
+      {!isLoading && (
+        <Modal
+          isOpen={open}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) onClose();
+          }}
+          size="3xl"
+        >
+          <ModalContent>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -102,7 +108,6 @@ export default function UpdateDetailProduct({
               </ModalHeader>
               <ModalBody>
                 <div className="flex gap-x-2">
-                  {/* Nombre */}
                   <Input
                     isDisabled={type === "details"}
                     type="text"
@@ -112,8 +117,6 @@ export default function UpdateDetailProduct({
                     value={product.name || ""}
                     onChange={handleInputChange}
                   />
-
-                  {/* Descripción */}
                   <Input
                     isDisabled={type === "details"}
                     type="textarea"
@@ -124,9 +127,7 @@ export default function UpdateDetailProduct({
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="flex gap-x-2">
-                  {/* Precio */}
                   <Input
                     isDisabled={type === "details"}
                     label="Precio"
@@ -142,8 +143,6 @@ export default function UpdateDetailProduct({
                     value={product.price || ""}
                     onChange={handleInputChange}
                   />
-
-                  {/* Stock */}
                   <Input
                     isDisabled={type === "details"}
                     label="Stock"
@@ -155,9 +154,7 @@ export default function UpdateDetailProduct({
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="flex gap-x-2">
-                  {/* Categoría */}
                   <Select
                     isDisabled={type === "details"}
                     label="Categoría"
@@ -172,8 +169,6 @@ export default function UpdateDetailProduct({
                       </SelectItem>
                     ))}
                   </Select>
-
-                  {/* Color */}
                   <Input
                     isDisabled={type === "details"}
                     label="Color"
@@ -184,8 +179,6 @@ export default function UpdateDetailProduct({
                     onChange={handleInputChange}
                   />
                 </div>
-
-                {/* Tipo de Planta */}
                 <Input
                   isDisabled={type === "details"}
                   label="Tipo de planta"
@@ -195,8 +188,6 @@ export default function UpdateDetailProduct({
                   value={product.plantType || ""}
                   onChange={handleInputChange}
                 />
-
-                {/* Descuento */}
                 <Input
                   isDisabled={type === "details"}
                   label="Descuento"
@@ -212,8 +203,6 @@ export default function UpdateDetailProduct({
                     </div>
                   }
                 />
-
-                {/* SKU */}
                 <Input
                   isDisabled
                   label="SKU"
@@ -223,8 +212,6 @@ export default function UpdateDetailProduct({
                   isReadOnly
                   defaultValue={product.sku || ""}
                 />
-
-                {/* Imagen */}
                 <Input
                   isDisabled={type === "details"}
                   name="image"
@@ -236,8 +223,6 @@ export default function UpdateDetailProduct({
                   value={product.image || ""}
                   onChange={handleInputChange}
                 />
-
-                {/* Imagen Hover */}
                 <Input
                   isDisabled={type === "details"}
                   name="imageHover"
@@ -261,9 +246,9 @@ export default function UpdateDetailProduct({
                 )}
               </ModalFooter>
             </form>
-          )}
-        </ModalContent>
-      </Modal>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 }
