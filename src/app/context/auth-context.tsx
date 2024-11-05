@@ -7,6 +7,8 @@ interface AuthContextProps {
   loading: boolean;
   loginAuth: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  error: string | null;
+  clearError: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -14,6 +16,8 @@ const AuthContext = createContext<AuthContextProps>({
   loading: false,
   loginAuth: async () => {},
   logout: () => {},
+  error: null,
+  clearError: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -30,6 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const pathName = usePathname();
 
@@ -52,15 +57,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(false);
   }, [router, pathName]);
 
+  const clearError = () => setError(null);
+
   const loginAuth = async (username: string, password: string) => {
     try {
       const response = await login(username, password);
       if (!response) {
-        throw new Error("Invalid credentials");
+        throw new Error("Credenciales inválidas");
       }
       localStorage.setItem("token", response);
       const decodedToken = JSON.parse(atob(response.split(".")[1]));
       setUser({ token: response, ...decodedToken });
+      setError(null); // Restablecer error si el login es exitoso
 
       const defaultRoute = decodedToken.role.some(
         (r: any) => r.authority !== "USER"
@@ -69,8 +77,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         : "/";
 
       router.push(defaultRoute);
-    } catch (error) {
-      console.error("Error during login:", error);
+    } catch (error: any) {
+      console.error("Error durante el login:", error);
+      setError(error.message); // Establecer el mensaje de error
     }
   };
 
@@ -80,7 +89,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, loginAuth, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, loginAuth, logout, error, clearError }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

@@ -5,6 +5,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { EyeFilledIcon } from "../../../../public/svg/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../../../../public/svg/EyeSlashFilledIcon";
+import { toast, Toaster } from "sonner";
 
 export default function Login() {
   const [isVisible, setIsVisible] = useState(false);
@@ -13,30 +14,25 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loginAuth } = useAuth();
+  const { loginAuth, error, clearError } = useAuth();
 
-  // const router = useRouter();
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault();
-      setLoading(true);
-      if (!username || !password) {
-        throw new Error("Email and password are required");
-      }
-      await loginAuth(username, password);
+    e.preventDefault();
+    setLoading(true);
 
-      // router.push("/");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+    await loginAuth(username, password);
+
+    if (error) {
+      toast.error(error);
     }
+    setLoading(false);
   };
 
   return (
     <section className="flex min-h-screen">
+      <Toaster richColors />
       <div className="hidden md:flex w-1/3 relative">
         <a href="/">
           <Image
@@ -56,7 +52,10 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                clearError();
+              }}
               type="email"
               name="email"
               label="Correo Electrónico"
@@ -68,7 +67,10 @@ export default function Login() {
             />
             <Input
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                clearError();
+              }}
               name="password"
               label="Contraseña"
               variant="underlined"
@@ -105,7 +107,7 @@ export default function Login() {
                 ¿Olvidaste tu contraseña?
               </a>
             </div>
-            <div className="flex items-center justify-center mt-6">
+            <div className="flex flex-col items-center justify-center mt-6">
               <Button
                 color="primary"
                 type="submit"

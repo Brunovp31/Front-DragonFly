@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { AuthProvider } from "./context/auth-context";
 import "./globals.css";
 import { CartProvider } from "./context/cart-context";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Toaster />
         <AuthProvider>
           <CartProvider>
             {shouldShowNavbar ? (
