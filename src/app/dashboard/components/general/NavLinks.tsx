@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GrUserWorker } from "react-icons/gr";
 import { IoHomeOutline } from "react-icons/io5";
-import { MdProductionQuantityLimits } from "react-icons/md";
+import { MdDeliveryDining, MdProductionQuantityLimits } from "react-icons/md";
 import { RxActivityLog, RxDashboard, RxPerson } from "react-icons/rx";
 
 const permitAll = ["ADMIN", "WORKER", "DELIVERY", "GARDENER"];
@@ -50,7 +50,7 @@ const links = [
   {
     name: "Deliveries",
     href: "/dashboard/deliveries",
-    icon: MdProductionQuantityLimits,
+    icon: MdDeliveryDining,
     permit: ["DELIVERY", "ADMIN"],
   },
 ];
