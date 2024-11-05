@@ -28,7 +28,7 @@ export default function UpdateDetailProduct({
 }) {
   const [product, setProduct] = useState({} as any);
   const [categories, setCategories] = useState([] as any);
-  const [categoryName, setCategoryName] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
   useEffect(() => {
     if (open) {
@@ -36,8 +36,7 @@ export default function UpdateDetailProduct({
         try {
           const data = await getProductById(id);
           setProduct(data);
-          const category = data.category;
-          setCategoryName(category.name);
+          setCategoryId(data.category.id);
         } catch (error) {
           console.error(error);
         }
@@ -61,10 +60,15 @@ export default function UpdateDetailProduct({
     setProduct((prev: any) => ({ ...prev, [name]: value }));
   };
 
+  const handleCategoryChange = (selectedKey: any) => {
+    setCategoryId(selectedKey);
+    setProduct((prev: any) => ({ ...prev, category: { id: selectedKey } }));
+  };
+
   const handleUpdateProduct = async (e: any) => {
     e.preventDefault();
     try {
-      await updateProduct(product, id);
+      await updateProduct({ ...product, category: { id: categoryId } }, id);
       handleReload();
     } catch (error) {
       console.error("Error updating product:", error);
@@ -101,23 +105,23 @@ export default function UpdateDetailProduct({
                   <div className="flex gap-x-2">
                     {/* Nombre */}
                     <Input
-                      disabled={type === "details"}
+                      isDisabled={type === "details"}
                       type="text"
                       name="name"
                       label="Nombre"
                       isRequired
-                      value={product.name}
+                      value={product.name || ""}
                       onChange={handleInputChange}
                     />
 
                     {/* Descripción */}
                     <Input
-                      disabled={type === "details"}
+                      isDisabled={type === "details"}
                       type="textarea"
                       name="description"
                       label="Descripción"
                       isRequired
-                      value={product.description}
+                      value={product.description || ""}
                       onChange={handleInputChange}
                     />
                   </div>
@@ -125,7 +129,7 @@ export default function UpdateDetailProduct({
                   <div className="flex gap-x-2">
                     {/* Precio */}
                     <Input
-                      disabled={type === "details"}
+                      isDisabled={type === "details"}
                       label="Precio"
                       name="price"
                       placeholder="0.00"
@@ -136,19 +140,19 @@ export default function UpdateDetailProduct({
                         </div>
                       }
                       isRequired
-                      value={product.price}
+                      value={product.price || ""}
                       onChange={handleInputChange}
                     />
 
                     {/* Stock */}
                     <Input
-                      disabled={type === "details"}
+                      isDisabled={type === "details"}
                       label="Stock"
                       name="stock"
                       type="number"
                       placeholder="0"
                       isRequired
-                      value={product.stock}
+                      value={product.stock || ""}
                       onChange={handleInputChange}
                     />
                   </div>
@@ -156,13 +160,15 @@ export default function UpdateDetailProduct({
                   <div className="flex gap-x-2">
                     {/* Categoría */}
                     <Select
-                      disabled={type === "details"}
+                      isDisabled={type === "details"}
                       label="Categoría"
+                      selectedKeys={categoryId ? [categoryId] : []}
+                      onSelectionChange={handleCategoryChange}
                       name="category"
                       isRequired
                     >
                       {categories.map((category: any) => (
-                        <SelectItem key={category.id} value={category.name}>
+                        <SelectItem key={category.id} value={category.id}>
                           {category.name}
                         </SelectItem>
                       ))}
@@ -170,36 +176,36 @@ export default function UpdateDetailProduct({
 
                     {/* Color */}
                     <Input
-                      disabled={type === "details"}
+                      isDisabled={type === "details"}
                       label="Color"
                       name="color"
                       placeholder="Ejemplo: Verde"
                       isRequired
-                      value={product.color}
+                      value={product.color || ""}
                       onChange={handleInputChange}
                     />
                   </div>
 
                   {/* Tipo de Planta */}
                   <Input
-                    disabled={type === "details"}
+                    isDisabled={type === "details"}
                     label="Tipo de planta"
                     name="plantType"
                     placeholder="Ejemplo: Suculenta"
                     isRequired
-                    value={product.flowerType}
+                    value={product.plantType || ""}
                     onChange={handleInputChange}
                   />
 
                   {/* Descuento */}
                   <Input
-                    disabled={type === "details"}
+                    isDisabled={type === "details"}
                     label="Descuento"
                     name="discount"
                     placeholder="0.00"
                     type="number"
                     isRequired
-                    value={product.discount}
+                    value={product.discount || ""}
                     onChange={handleInputChange}
                     startContent={
                       <div className="pointer-events-none flex items-center">
@@ -210,38 +216,38 @@ export default function UpdateDetailProduct({
 
                   {/* SKU */}
                   <Input
-                    disabled
+                    isDisabled
                     label="SKU"
                     name="sku"
                     placeholder="Ejemplo: 123456"
                     description="El SKU es un código único para cada producto. Autogenerado."
                     isReadOnly
-                    defaultValue={product.sku}
-                    isDisabled
+                    defaultValue={product.sku || ""}
                   />
 
                   {/* Imagen */}
                   <Input
-                    disabled={type === "details"}
+                    isDisabled={type === "details"}
                     name="image"
                     description={
                       type === "details"
                         ? "Imagen de producto"
                         : "Selecciona una imagen para tu producto."
                     }
-                    value={product.image}
+                    value={product.image || ""}
                     onChange={handleInputChange}
                   />
+
                   {/* Imagen Hover */}
                   <Input
-                    disabled={type === "details"}
+                    isDisabled={type === "details"}
                     name="imageHover"
                     description={
                       type === "details"
                         ? "Imagen de hover"
                         : "Selecciona una imagen para tu producto."
                     }
-                    value={product.hoverImage}
+                    value={product.imageHover || ""}
                     onChange={handleInputChange}
                   />
                 </ModalBody>
