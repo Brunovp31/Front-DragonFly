@@ -240,7 +240,7 @@ export default function ShoppingCart() {
                     <Input
                       type="number"
                       min={0}
-                      value={item.quantity}
+                      value={String(item.quantity)}
                       onChange={(e) => {
                         const newQuantity = Number(e.target.value);
                         updateQuantity(item.id, newQuantity);
