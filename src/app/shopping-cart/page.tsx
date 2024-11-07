@@ -91,60 +91,14 @@ export default function ShoppingCart() {
   const handleDocumentTypeChange = (value: string) => {
     setCustomerDetails((prevDetails) => ({
       ...prevDetails,
-      documentType: value,
+      documentType: String(value),
       documentNumber: "",
     }));
     setDocError("");
   };
 
-  const validateForm = (): boolean => {
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      documentType,
-      documentNumber,
-      shippingAddress,
-      deliveryDate,
-      deliveryTime,
-    } = customerDetails;
-
-    const isValid = [
-      firstName,
-      lastName,
-      email,
-      phone,
-      documentType,
-      documentNumber,
-      shippingAddress,
-      deliveryDate,
-      deliveryTime,
-    ].every(Boolean);
-
-    setIsValid(isValid);
-    return isValid;
-  };
-
   const handleProceedToPayment = () => {
     window.open("https://mpago.la/2k1anq8", "_self");
-    // const valid = validateForm();
-    // if (valid) {
-    //   alert("Formulario válido. Procediendo al pago...");
-    //   // Add logic to process payment
-    // } else {
-    //   alert("Por favor completa todos los campos obligatorios.");
-    //   // Update field errors to show validation messages
-    //   setFieldErrors({
-    //     firstName: !customerDetails.firstName,
-    //     lastName: !customerDetails.lastName,
-    //     email: !customerDetails.email,
-    //     phone: !customerDetails.phone,
-    //     documentNumber: !customerDetails.documentNumber,
-    //     deliveryDate: !customerDetails.deliveryDate,
-    //     deliveryTime: !customerDetails.deliveryTime,
-    //   });
-    // }
   };
 
   return (
@@ -172,6 +126,7 @@ export default function ShoppingCart() {
                 className={fieldErrors.lastName ? "border-red-500" : ""}
               />
             </div>
+
             <div className="flex items-center gap-x-2 justify-between">
               <Input
                 label="Correo Electrónico"
@@ -191,7 +146,7 @@ export default function ShoppingCart() {
               />
             </div>
             <div className="flex items-center gap-x-2 justify-between">
-              <Select
+              {/* <Select
                 label="Tipo de Documento"
                 name="documentType"
                 value={customerDetails.documentType}
@@ -204,12 +159,12 @@ export default function ShoppingCart() {
                 </SelectItem>
                 <>
                   {documentTypes.map((type: any) => (
-                    <SelectItem key={type} value={type}>
+                    <SelectItem key={String(type)} value={String(type)}>
                       {type}
                     </SelectItem>
                   ))}
                 </>
-              </Select>
+              </Select> */}
               <Input
                 label="Número de Documento"
                 name="documentNumber"
@@ -232,7 +187,7 @@ export default function ShoppingCart() {
                 required
                 className={fieldErrors.deliveryDate ? "border-red-500" : ""}
               />
-              <Select
+              {/* <Select
                 label="Rango de Hora"
                 name="deliveryTime"
                 value={customerDetails.deliveryTime}
@@ -245,12 +200,12 @@ export default function ShoppingCart() {
                 </SelectItem>
                 <>
                   {timeOptions.map((time) => (
-                    <SelectItem key={time} value={time}>
+                    <SelectItem key={String(time)} value={String(time)}>
                       {time}
                     </SelectItem>
                   ))}
                 </>
-              </Select>
+              </Select> */}
             </div>
           </form>
           {!isValid && (
@@ -285,7 +240,7 @@ export default function ShoppingCart() {
                     <Input
                       type="number"
                       min={0}
-                      value={String(item.quantity)}
+                      value={item.quantity}
                       onChange={(e) => {
                         const newQuantity = Number(e.target.value);
                         updateQuantity(item.id, newQuantity);
