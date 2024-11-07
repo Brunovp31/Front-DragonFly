@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "@/components/product-card";
 import { getAllProducts } from "@/services/product-service";
 import { Range, getTrackBackground } from "react-range";
+import FlowerSpinner from "@/utils/icons/FlowerSpinner";
 
 interface Category {
   name: string;
@@ -23,10 +24,41 @@ interface Product {
 
 const categories: Category[] = [
   { name: "Flores", subcategories: ["Anturios", "Orquídeas"] },
-  { name: "Arreglos Florales", subcategories: ["Escritorios", "Jardines", "Oficinas", "Restaurantes", "Salas"] },
+  {
+    name: "Arreglos Florales",
+    subcategories: [
+      "Escritorios",
+      "Jardines",
+      "Oficinas",
+      "Restaurantes",
+      "Salas",
+    ],
+  },
   { name: "Condolencias", subcategories: ["Lágrimas", "Coronas"] },
-  { name: "Cuidado de la planta", subcategories: ["Estimulantes de raíces", "Fertilizantes Líquidos", "Humificadores", "Macetas"] },
-  { name: "Ocaciones Especiales", subcategories: ["Aniversarios", "Bautizo", "Cumpleaños", "Día de la Madre", "Día del Padre", "Graduaciones", "Inauguración de Negocios", "Matrimonio", "Nacimiento", "San Valentín"] },
+  {
+    name: "Cuidado de la planta",
+    subcategories: [
+      "Estimulantes de raíces",
+      "Fertilizantes Líquidos",
+      "Humificadores",
+      "Macetas",
+    ],
+  },
+  {
+    name: "Ocaciones Especiales",
+    subcategories: [
+      "Aniversarios",
+      "Bautizo",
+      "Cumpleaños",
+      "Día de la Madre",
+      "Día del Padre",
+      "Graduaciones",
+      "Inauguración de Negocios",
+      "Matrimonio",
+      "Nacimiento",
+      "San Valentín",
+    ],
+  },
   { name: "Ramos y Boxes", subcategories: ["Ramos", "Boxes"] },
 ];
 
@@ -39,16 +71,22 @@ export default function Catalogo() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("Por Defecto");
   const [viewMode, setViewMode] = useState("grid");
-  const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
+  const [expandedCategories, setExpandedCategories] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [priceRange, setPriceRange] = useState<[number, number]>([MIN, MAX]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
         const data: Product[] = await getAllProducts();
         setProducts(data);
       } catch (error) {
         console.error("Error al obtener productos:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProducts();
@@ -69,8 +107,9 @@ export default function Catalogo() {
       .filter((product) =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
-      .filter((product) =>
-        product.price >= priceRange[0] && product.price <= priceRange[1]
+      .filter(
+        (product) =>
+          product.price >= priceRange[0] && product.price <= priceRange[1]
       )
       .sort((a, b) => {
         switch (sortOrder) {
@@ -99,21 +138,29 @@ export default function Catalogo() {
       <aside className="w-1/4 pr-6 border-r border-gray-300">
         {/* Menú de categorías */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Menú Categorías</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">
+            Menú Categorías
+          </h2>
           <ul className="space-y-2 text-gray-600">
             <li
               onClick={() => setSelectedCategory(null)}
-              className={`cursor-pointer ${!selectedCategory ? "font-bold text-black" : ""}`}
-            >
-              
-            </li>
+              className={`cursor-pointer ${
+                !selectedCategory ? "font-bold text-black" : ""
+              }`}
+            ></li>
             {categories.map((category) => (
               <li key={category.name} className="cursor-pointer">
                 <div
                   className="flex justify-between items-center"
                   onClick={() => toggleCategory(category.name)}
                 >
-                  <span className={`${selectedCategory === category.name ? "font-bold text-black" : ""}`}>
+                  <span
+                    className={`${
+                      selectedCategory === category.name
+                        ? "font-bold text-black"
+                        : ""
+                    }`}
+                  >
                     {category.name}
                   </span>
                   <span className="text-xl">
@@ -140,7 +187,9 @@ export default function Catalogo() {
 
         {/* Filtro de precio */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-9 text-gray-800">Filtrar por Precio</h2>
+          <h2 className="text-xl font-semibold mb-9 text-gray-800">
+            Filtrar por Precio
+          </h2>
           <Range
             values={priceRange}
             step={1}
@@ -151,17 +200,17 @@ export default function Catalogo() {
               <div
                 {...props}
                 style={{
-                  height: '10px', // Altura del track
-                  width: '100%',
+                  height: "10px", // Altura del track
+                  width: "100%",
                   background: getTrackBackground({
                     values: priceRange,
-                    colors: ['#ddd', '#007BFF', '#ddd'],
+                    colors: ["#ddd", "#007BFF", "#ddd"],
                     min: MIN,
-                    max: MAX
+                    max: MAX,
                   }),
-                  borderRadius: '5px',
-                  alignSelf: 'center',
-                  marginTop: '6px'
+                  borderRadius: "5px",
+                  alignSelf: "center",
+                  marginTop: "6px",
                 }}
               >
                 {children}
@@ -171,23 +220,23 @@ export default function Catalogo() {
               <div
                 {...props}
                 style={{
-                  height: '20px', // Tamaño de los puntos
-                  width: '20px',
-                  backgroundColor: '#007BFF',
-                  borderRadius: '50%',
-                  boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.3)',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  outline: 'none',
-                  border: '2px solid white',
-                  marginTop: '-20px', //Alineación del punto
+                  height: "20px", // Tamaño de los puntos
+                  width: "20px",
+                  backgroundColor: "#007BFF",
+                  borderRadius: "50%",
+                  boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.3)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  outline: "none",
+                  border: "2px solid white",
+                  marginTop: "-20px", //Alineación del punto
                 }}
               />
             )}
           />
           <div className="text-gray-600 mt-2">
-            Precio: /S {priceRange[0]} — S/ {priceRange[1]} 
+            Precio: /S {priceRange[0]} — S/ {priceRange[1]}
           </div>
           <button
             onClick={applyFilters}
@@ -205,11 +254,13 @@ export default function Catalogo() {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 ${viewMode === "grid" ? "font-bold text-black" : "text-gray-600"}`}
+              className={`p-2 ${
+                viewMode === "grid" ? "font-bold text-black" : "text-gray-600"
+              }`}
               title="Ver en cuadrícula"
               aria-label="Ver en cuadrícula"
             >
-              <img 
+              <img
                 src="mosaico.png"
                 alt="Vista en cuadrícula"
                 className="w-5 h-5 inline"
@@ -217,11 +268,13 @@ export default function Catalogo() {
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 ${viewMode === "list" ? "font-bold text-black" : "text-gray-600"}`}
+              className={`p-2 ${
+                viewMode === "list" ? "font-bold text-black" : "text-gray-600"
+              }`}
               title="Ver en lista"
               aria-label="Ver en lista"
             >
-              <img 
+              <img
                 src="lista.png"
                 alt="Vista en lista"
                 className="w-8 h-8 inline"
@@ -238,33 +291,51 @@ export default function Catalogo() {
             <option value="Por Defecto">Por Defecto</option>
             <option value="Destacados">Ordenado por destacados</option>
             <option value="Ofertas">Ordenado por productos en oferta</option>
-            <option value="Precio: Bajo a Alto">Ordenado por precio más bajo</option>
-            <option value="Precio: Alto a Bajo">Ordenado por precio más alto</option>
+            <option value="Precio: Bajo a Alto">
+              Ordenado por precio más bajo
+            </option>
+            <option value="Precio: Alto a Bajo">
+              Ordenado por precio más alto
+            </option>
             <option value="A-Z">Ordenado alfabéticamente, A-Z</option>
             <option value="Z-A">Ordenado alfabéticamente, Z-A</option>
           </select>
         </div>
 
-        <div className={`grid ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"} gap-6`}>
-          {products.length === 0 && (
-            <div className="text-center text-gray-500">No hay productos disponibles</div>
+        <div
+          className={`grid ${
+            viewMode === "grid"
+              ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+              : "grid-cols-1"
+          } gap-6`}
+        >
+          {loading ? (
+            <div className="mt-8 flex justify-center items-center">
+              <FlowerSpinner />
+            </div>
+          ) : (
+            <>
+              {products.length === 0 ? (
+                <div className="text-center text-gray-500">
+                  No hay productos disponibles
+                </div>
+              ) : (
+                products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    image={product.image}
+                    hoverImage={product.hoverImage}
+                    productName={product.name}
+                    productDescription={product.description}
+                    productPrice={product.price}
+                  />
+                ))
+              )}
+            </>
           )}
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              image={product.image}
-              hoverImage={product.hoverImage}
-              productName={product.name}
-              productDescription={product.description}
-              productPrice={product.price}
-            />
-          ))}
         </div>
       </section>
     </main>
   );
 }
-
-
-
