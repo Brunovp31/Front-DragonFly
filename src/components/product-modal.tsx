@@ -31,7 +31,7 @@ export default function ProductModal({
           backdrop:
             "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
         }}
-        className="w-full max-w-3xl mx-auto  [overflow-y-auto]"
+        className="w-full max-w-3xl"
       >
         <ModalContent>
           <>
@@ -46,17 +46,15 @@ export default function ProductModal({
                     items-center justify-center
                 "
               >
-                <img
-                  src={product.image}
-                  alt="Orquídea"
-                  className="rounded-xl w-80 h-80 object-cover"
-                />
-                <div className="flex flex-col items-center gap-y-20">
-                  <p className="text-sm">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam pulvinar risus non risus hendrerit venenatis.
-                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                  </p>
+                <div className="flex items-center justify-start w-1/2">
+                  <img
+                    src={product.image}
+                    alt="Orquídea"
+                    className="rounded-xl w-80 h-80 object-cover "
+                  />
+                </div>
+                <div className="flex flex-col items-center gap-y-20 justify-center w-1/2">
+                  <p className="text-sm">{product.productDescription}</p>
                   <Button
                     color="success"
                     endContent={<FaPlus />}
