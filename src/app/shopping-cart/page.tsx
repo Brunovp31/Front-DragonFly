@@ -12,8 +12,10 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { useCart } from "../context/cart-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Map from "@/components/google-map";
+import { useAuth } from "../context/auth-context";
+import { createOrder } from "@/services/order-service";
 
 const documentRules: any = {
   DNI: 8,
@@ -24,6 +26,18 @@ const documentRules: any = {
 
 export default function ShoppingCart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
+
+  const user = {
+    id: "67294d5f57e39b64e31e6d29",
+  };
+
+  useEffect(() => {
+    const createOrderHandler = async () => {
+      await createOrder(user.id, cart);
+    };
+    createOrderHandler();
+  }, []);
+
   const [customerDetails, setCustomerDetails] = useState({
     firstName: "",
     lastName: "",
