@@ -36,7 +36,7 @@ export default function ProductModal({
         <ModalContent>
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {product.productName} - {product.productPrice}
+              {product.productName} - S/. {product.productPrice}
             </ModalHeader>
             <ModalBody>
               <div
