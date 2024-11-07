@@ -1,9 +1,10 @@
 "use client";
+import Map from "@/components/google-map";
+import { createOrder } from "@/services/order-service";
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import {
   Button,
   Input,
-  Select,
-  SelectItem,
   Table,
   TableBody,
   TableCell,
@@ -11,11 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { useCart } from "../context/cart-context";
 import { useEffect, useState } from "react";
-import Map from "@/components/google-map";
-import { useAuth } from "../context/auth-context";
-import { createOrder } from "@/services/order-service";
+import { useCart } from "../context/cart-context";
+initMercadoPago("TEST-f3f953fd-f6f8-46f0-b316-3436e6625f3d");
 
 const documentRules: any = {
   DNI: 8,
@@ -33,7 +32,13 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     const createOrderHandler = async () => {
-      await createOrder(user.id, cart);
+      try {
+        await createOrder(user.id, cart);
+
+        // Luego debería obtener la orden creada, de esa orden obtener el preference ID y redirigir al checkout
+      } catch (e) {
+        console.log(e);
+      }
     };
     createOrderHandler();
   }, []);
@@ -293,7 +298,13 @@ export default function ShoppingCart() {
           </div>
           <Button className="mt-4" onClick={handleProceedToPayment}>
             Proceder al Pago
-          </Button>
+          </Button> 
+
+          {/* <Wallet
+            initialization={{
+              preferenceId: "525334006-9750a842-aaee-4633-abdd-e906817d9fe8",
+            }}
+          /> */}
         </div>
       </div>
       <Map />
