@@ -129,7 +129,6 @@ export default function ShoppingCart() {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6">Carrito de Compras</h1>
-      <h2>{preferenceId}</h2>
       <div className="flex flex-col md:flex-row gap-10">
         <div className="w-full md:w-2/3 bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">Información del Cliente</h2>
