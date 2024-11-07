@@ -2,7 +2,7 @@ export default function Horarios() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="text-center">
-      <h2 className="text-lg font-semibold" style={{ color: '#ff0000', fontFamily: 'arial' }}>
+      <h2 className="text-lg font-semibold text-red-500" style={{ fontFamily: 'arial' }}>
           HORARIO DE ATENCIÓN AL CLIENTE
         </h2>
       </div>

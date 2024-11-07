@@ -30,7 +30,7 @@ const TerminosCondiciones = () => {
   return (
     <div className="max-w-5xl mx-auto">
       <div>
-      <h2 className="text-lg font-semibold" style={{ color: '#ff0000', fontFamily: 'arial' }}>
+      <h2 className="text-lg font-semibold text-red-500 " style={{fontFamily: 'arial' }}>
           TÉRMINOS Y CONDICIONES GENERALES.
         </h2>
       </div>

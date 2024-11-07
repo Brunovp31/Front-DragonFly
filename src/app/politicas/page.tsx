@@ -1,7 +1,7 @@
 export default function Politicas() {
   return (
         <div className="max-w-5xl mx-auto">
-        <h2 className="text-lg font-semibold" style={{ color: '#ff0000', fontFamily: 'arial' }}>
+        <h2 className="text-lg font-semibold text-red-500" style={{ fontFamily: 'arial' }}>
           POLÍTICAS LEGALES DE ENTREGA, GARANTÍA Y DEVOLUCIÓN DE PRODUCTOS
         </h2>
         <p>
