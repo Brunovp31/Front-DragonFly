@@ -138,6 +138,7 @@ export default function Catalogo() {
       <aside className="w-1/4 pr-6 border-r border-gray-300">
         {/* Menú de categorías */}
         <div className="mb-8">
+          
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
             Menú Categorías
           </h2>
@@ -191,6 +192,7 @@ export default function Catalogo() {
             Filtrar por Precio
           </h2>
           <Range
+            disabled={loading}
             values={priceRange}
             step={1}
             min={MIN}
@@ -240,9 +242,12 @@ export default function Catalogo() {
           </div>
           <button
             onClick={applyFilters}
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            className={`py-2 px-4 rounded mt-4 ${
+              loading ? "bg-gray-500 text-white" : "bg-blue-500 text-white"
+            }`}
             title="Filtrar"
             aria-label="Filtrar"
+            disabled={loading}
           >
             Filtrar
           </button>
