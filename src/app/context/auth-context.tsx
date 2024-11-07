@@ -1,4 +1,4 @@
-import { login } from "@/services/auth-services";
+import { getUserByToken, login } from "@/services/auth-services";
 import { usePathname, useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -40,18 +40,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-      const userRoles = decodedToken.role?.map((r: any) => r.authority) || [];
-      const hasPermission = userRoles.some((role: string) => {
-        const allowedRoutes = rolesAndPermissions[role];
-        return allowedRoutes.includes("/*") || allowedRoutes.includes(pathName);
-      });
+    if (token && typeof token === "string") {
+      try {
+        const decodedToken = JSON.parse(atob(token.split(".")[1]));
+        const userRoles = decodedToken.role?.map((r: any) => r.authority) || [];
+        const hasPermission = userRoles.some((role: string) => {
+          const allowedRoutes = rolesAndPermissions[role];
+          return (
+            allowedRoutes.includes("/*") || allowedRoutes.includes(pathName)
+          );
+        });
 
-      if (!hasPermission && pathName.startsWith("/dashboard")) {
-        router.push("/");
-      } else {
-        setUser({ token, ...decodedToken });
+        if (!hasPermission && pathName.startsWith("/dashboard")) {
+          router.push("/");
+        } else {
+          setUser({ token, ...decodedToken });
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        setError("Token inválido");
+        localStorage.removeItem("token");
       }
     }
     setLoading(false);
@@ -62,13 +70,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const loginAuth = async (username: string, password: string) => {
     try {
       const response = await login(username, password);
-      if (!response) {
+      if (!response || typeof response !== "string") {
         throw new Error("Credenciales inválidas");
       }
       localStorage.setItem("token", response);
+
       const decodedToken = JSON.parse(atob(response.split(".")[1]));
-      setUser({ token: response, ...decodedToken });
-      setError(null); // Restablecer error si el login es exitoso
+      const user_id = await getUserByToken(response);
+      setUser({
+        token: response,
+        user_id, // Guardar user_id aquí
+        ...decodedToken,
+      });
+      setError(null); // Reset error if login is successful
 
       const defaultRoute = decodedToken.role.some(
         (r: any) => r.authority !== "USER"
@@ -79,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       router.push(defaultRoute);
     } catch (error: any) {
       console.error("Error durante el login:", error);
-      setError(error.message); // Establecer el mensaje de error
+      setError(error.message); // Set error message
     }
   };
 

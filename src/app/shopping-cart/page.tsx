@@ -15,6 +15,8 @@ import {
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { useCart } from "../context/cart-context";
+import { useAuth } from "../context/auth-context";
+import { getUserByToken } from "@/services/auth-services";
 initMercadoPago("TEST-f3f953fd-f6f8-46f0-b316-3436e6625f3d");
 
 const documentRules: any = {
@@ -27,17 +29,16 @@ const documentRules: any = {
 export default function ShoppingCart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   const [preferenceId, setPreferenceId] = useState("");
-
-  const user = {
-    id: "67294d5f57e39b64e31e6d29",
-  };
 
   useEffect(() => {
     const createOrderHandler = async () => {
       try {
         setLoading(true);
-        const orderCreated = await createOrder(user.id, cart);
+        const token = localStorage.getItem("token");
+        const user = await getUserByToken(token);
+        const orderCreated = await createOrder(user, cart);
         const preferenceId = orderCreated.preferenceId;
         setPreferenceId(preferenceId);
       } catch (e) {

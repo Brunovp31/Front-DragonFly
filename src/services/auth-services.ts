@@ -47,3 +47,14 @@ export const getAllUsers = async () => {
     throw error;
   }
 };
+
+export const getUserByToken = async (token: any) => {
+  try {
+    const response = await fetch(`${BASE_URL}/by-token/${token}`);
+    const data = await response.json();
+    return data.id;
+  } catch (error) {
+    console.error("Error al obtener datos de usuario:", error);
+    throw error;
+  }
+};
