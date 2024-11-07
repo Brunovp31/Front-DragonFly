@@ -1,6 +1,7 @@
 "use client";
 import Map from "@/components/google-map";
 import { createOrder } from "@/services/order-service";
+import FlowerSpinner from "@/utils/icons/FlowerSpinner";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import {
   Button,
@@ -25,6 +26,8 @@ const documentRules: any = {
 
 export default function ShoppingCart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
+  const [loading, setLoading] = useState(true);
+  const [preferenceId, setPreferenceId] = useState("");
 
   const user = {
     id: "67294d5f57e39b64e31e6d29",
@@ -33,11 +36,14 @@ export default function ShoppingCart() {
   useEffect(() => {
     const createOrderHandler = async () => {
       try {
-        await createOrder(user.id, cart);
-
-        // Luego debería obtener la orden creada, de esa orden obtener el preference ID y redirigir al checkout
+        setLoading(true);
+        const orderCreated = await createOrder(user.id, cart);
+        const preferenceId = orderCreated.preferenceId;
+        setPreferenceId(preferenceId);
       } catch (e) {
         console.log(e);
+      } finally {
+        setLoading(false);
       }
     };
     createOrderHandler();
@@ -123,6 +129,7 @@ export default function ShoppingCart() {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6">Carrito de Compras</h1>
+      <h2>{preferenceId}</h2>
       <div className="flex flex-col md:flex-row gap-10">
         <div className="w-full md:w-2/3 bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">Información del Cliente</h2>
@@ -296,15 +303,14 @@ export default function ShoppingCart() {
               <strong>Total:</strong> S/. {total.toFixed(2)}
             </p>
           </div>
-          <Button className="mt-4" onClick={handleProceedToPayment}>
-            Proceder al Pago
-          </Button> 
 
-          {/* <Wallet
-            initialization={{
-              preferenceId: "525334006-9750a842-aaee-4633-abdd-e906817d9fe8",
-            }}
-          /> */}
+          {loading && preferenceId ? (
+            <FlowerSpinner />
+          ) : preferenceId ? (
+            <div>
+              <Wallet initialization={{ preferenceId }} />
+            </div>
+          ) : null}
         </div>
       </div>
       <Map />

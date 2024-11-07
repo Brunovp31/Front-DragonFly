@@ -21,3 +21,7 @@ export const createOrder = (userId: any, products: any) => {
     },
   }).then((res) => res.json());
 };
+
+export const getOrderByUserId = (userId: any) => {
+  return fetch(`${BASE_URL}/orders/user/${userId}`).then((res) => res.json());
+};
