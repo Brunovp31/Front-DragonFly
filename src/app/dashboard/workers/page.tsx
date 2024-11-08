@@ -38,13 +38,20 @@ export default function WorkersDashboard() {
     fetchWorkers();
   }, []);
 
+  type colors =
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "danger"
+    | undefined;
   const statusColorMap = {
     ADMIN: "warning",
-    USER: "success",
-    DELIVERY: "info",
-    WORKER: "error",
-    GARDENER: "error",
-  } as any;
+    DELIVERY: "danger",
+    WORKER: "success",
+    GARDENER: "secondary",
+  } as Record<string, colors>;
 
   const renderCell = useCallback((worker: any, columnKey: any) => {
     const cellValue = worker[columnKey];
@@ -56,7 +63,7 @@ export default function WorkersDashboard() {
           </Chip>
         );
       default:
-        return cellValue;
+        return cellValue || "N/A";
     }
   }, []);
 
