@@ -78,6 +78,10 @@ export default function Catalogo() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    applyFilters();
+  }, [sortOrder]);
+
+  useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
@@ -138,7 +142,6 @@ export default function Catalogo() {
       <aside className="w-1/4 pr-6 border-r border-gray-300">
         {/* Menú de categorías */}
         <div className="mb-8">
-          
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
             Menú Categorías
           </h2>
@@ -173,7 +176,9 @@ export default function Catalogo() {
                     {category.subcategories.map((subcat) => (
                       <li
                         key={subcat}
-                        onClick={() => setSelectedCategory(subcat)}
+                        onClick={() => {
+                          setSelectedCategory(subcat);
+                        }}
                         className="cursor-pointer hover:text-black"
                       >
                         {subcat}
@@ -289,7 +294,9 @@ export default function Catalogo() {
 
           <select
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
+            onChange={(e) => {
+              setSortOrder(e.target.value);
+            }}
             className="border rounded p-2 text-gray-600 focus:outline-none"
             aria-label="Ordenar productos"
           >
