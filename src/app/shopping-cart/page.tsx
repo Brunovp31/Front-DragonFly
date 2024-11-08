@@ -35,7 +35,7 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     if (cart.length === 0) {
-      navigate.push("/")
+      navigate.push("/");
     }
   }, [cart]);
 
@@ -315,7 +315,14 @@ export default function ShoppingCart() {
             <FlowerSpinner />
           ) : preferenceId ? (
             <div>
-              <Wallet initialization={{ preferenceId }} />
+              <Wallet
+                initialization={
+                  {
+                    preferenceId,
+                    redirectMode: "modal",
+                  } as any
+                }
+              />
             </div>
           ) : null}
         </div>
