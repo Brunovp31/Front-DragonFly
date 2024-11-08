@@ -21,8 +21,8 @@ export default function Carousel() {
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
           <div className="embla__slide" key={1}>
-            <Image
-              src={Slider1}
+            <img
+              src="https://i.ytimg.com/vi/qd68NBQQeRs/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGEggWChlMA8=&rs=AOn4CLBrdaXLjsF9oOyLUENmbIg4rj6Feg"
               alt="carousel"
               width={1200}
               className="rounded-lg"
@@ -39,6 +39,14 @@ export default function Carousel() {
           <div className="embla__slide" key={3}>
             <Image
               src={Slider3}
+              alt="carousel"
+              width={1200}
+              className="rounded-lg"
+            />
+          </div>
+          <div className="embla__slide" key={4}>
+            <Image
+              src={Slider1}
               alt="carousel"
               width={1200}
               className="rounded-lg"
