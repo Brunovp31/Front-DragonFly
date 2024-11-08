@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 interface CartItem {
   id: any;
@@ -9,7 +9,7 @@ interface CartItem {
 interface CartContextProps {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
-  updateQuantity: (itemId: any, quantity: number) => void; 
+  updateQuantity: (itemId: any, quantity: number) => void;
   removeFromCart: (itemId: any) => void;
   clearCart: () => void;
 }
@@ -17,16 +17,23 @@ interface CartContextProps {
 const CartContext = createContext<CartContextProps>({
   cart: [],
   addToCart: () => {},
-  updateQuantity: () => {}, 
+  updateQuantity: () => {},
   removeFromCart: () => {},
   clearCart: () => {},
 });
 
 export const CartProvider = ({ children }: any) => {
-  const [cart, setCart] = useState([] as CartItem[]);
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    const storedCart = localStorage.getItem("cart");
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (item: CartItem) => {
-    setCart((prevCart: CartItem[]) => {
+    setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
         (cartItem) => cartItem.id === item.id
       );
@@ -46,19 +53,16 @@ export const CartProvider = ({ children }: any) => {
     });
   };
 
-
   const updateQuantity = (itemId: any, quantity: number) => {
-    setCart((prevCart: CartItem[]) =>
-      prevCart.map((item: CartItem) =>
+    setCart((prevCart) =>
+      prevCart.map((item) =>
         item.id === itemId ? { ...item, quantity } : item
       )
     );
   };
 
   const removeFromCart = (itemId: any) => {
-    setCart((prevCart: CartItem[]) =>
-      prevCart.filter((item: CartItem) => item.id !== itemId)
-    );
+    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
   };
 
   const clearCart = () => {
@@ -67,7 +71,7 @@ export const CartProvider = ({ children }: any) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart }} 
+      value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart }}
     >
       {children}
     </CartContext.Provider>
