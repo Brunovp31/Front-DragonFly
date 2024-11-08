@@ -85,29 +85,22 @@ export default function Dashboard() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          <motion.div
-            className="bg-white shadow-md rounded-lg p-6 text-center"
+          <motion.h2
+            className="text-xl font-semibold text-gray-700"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.5 }}
           >
-            <motion.h2
-              className="text-xl font-semibold text-gray-700"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              Clientes Actuales
-            </motion.h2>
-            <motion.p
-              className="text-4xl font-bold text-blue-600"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              {Math.floor(clientCount).toLocaleString()}
-            </motion.p>
-          </motion.div>
+            Clientes Actuales
+          </motion.h2>
+          <motion.p
+            className="text-4xl font-bold text-blue-600"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            {Math.floor(clientCount).toLocaleString()}
+          </motion.p>
         </motion.div>
         <motion.div
           className="bg-white shadow-md rounded-lg p-6 text-center"
