@@ -251,7 +251,7 @@ export default function ShoppingCart() {
         <div className="w-full md:w-1/3 bg-gray-100 p-6 rounded-lg shadow-md h-auto min-h-[400px]">
           <h2 className="text-2xl font-bold mb-4">Resumen del Pedido</h2>
 
-          {loading && preferenceId ? (
+          {loading && preferenceId == "" ? (
             <FlowerSpinner />
           ) : preferenceId ? (
             <div>

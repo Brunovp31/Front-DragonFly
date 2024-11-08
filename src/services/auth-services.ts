@@ -35,11 +35,7 @@ export const register = async (form: any) => {
 
 export const getAllUsers = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/users`, {
-      headers: {
-        //
-      },
-    });
+    const response = await fetch(`${BASE_URL}/users`);
     const data = await response.json();
     return data;
   } catch (error) {
