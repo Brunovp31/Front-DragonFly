@@ -112,6 +112,7 @@ export default function Login() {
                 color="primary"
                 type="submit"
                 isLoading={loading}
+                isDisabled={loading}
                 className="bg-pink-500 hover:bg-pink-600"
               >
                 Iniciar sesión
