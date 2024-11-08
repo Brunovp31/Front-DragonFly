@@ -1,5 +1,6 @@
 "use client";
 import Map from "@/components/google-map";
+import { getUserByToken } from "@/services/auth-services";
 import { createOrder } from "@/services/order-service";
 import FlowerSpinner from "@/utils/icons/FlowerSpinner";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
@@ -13,10 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "../context/cart-context";
-import { useAuth } from "../context/auth-context";
-import { getUserByToken } from "@/services/auth-services";
 initMercadoPago("TEST-f3f953fd-f6f8-46f0-b316-3436e6625f3d");
 
 const documentRules: any = {
@@ -29,8 +29,15 @@ const documentRules: any = {
 export default function ShoppingCart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
   const [preferenceId, setPreferenceId] = useState("");
+
+  const navigate = useRouter();
+
+  useEffect(() => {
+    if (cart.length === 0) {
+      navigate.push("/")
+    }
+  }, [cart]);
 
   useEffect(() => {
     const createOrderHandler = async () => {
