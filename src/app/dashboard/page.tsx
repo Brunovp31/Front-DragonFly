@@ -1,12 +1,27 @@
 "use client";
+import { getCountUsers } from "@/services/users-service";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [clientCount, setClientCount] = useState(0);
+  const [userCount, setUserCount] = useState(0);
 
   useEffect(() => {
-    const target = 1245;
+    const getUsersCountHandler = async () => {
+      try {
+        const response = await getCountUsers();
+        const data = await response;
+        setUserCount(data);
+      } catch (error) {
+        console.error("Error al obtener datos de usuario:", error);
+        throw error;
+      }
+    };
+
+    getUsersCountHandler();
+
+    const target = userCount;
     const duration = 2000;
     const increment = target / (duration / 10);
 
@@ -21,7 +36,7 @@ export default function Dashboard() {
     }, 10);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [userCount]);
   return (
     <motion.div
       className="p-6 bg-gray-100 min-h-screen w-[90%] mx-auto mt-10"

@@ -15,3 +15,14 @@ export const getUsersByRole = async (role: Role[]) => {
     throw error;
   }
 };
+
+export const getCountUsers = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/count`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener datos de usuario:", error);
+    throw error;
+  }
+};
