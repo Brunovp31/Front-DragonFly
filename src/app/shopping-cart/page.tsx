@@ -17,7 +17,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "../context/cart-context";
-initMercadoPago("TEST-f3f953fd-f6f8-46f0-b316-3436e6625f3d");
 
 const documentRules: any = {
   DNI: 8,
@@ -35,7 +34,7 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     if (cart.length === 0) {
-      navigate.push("/");
+      navigate.push("/catalogo");
     }
   }, [cart]);
 
@@ -48,6 +47,7 @@ export default function ShoppingCart() {
         const orderCreated = await createOrder(user, cart);
         const preferenceId = orderCreated.preferenceId;
         setPreferenceId(preferenceId);
+        initMercadoPago("TEST-f3f953fd-f6f8-46f0-b316-3436e6625f3d");
       } catch (e) {
         console.log(e);
       } finally {
@@ -250,79 +250,84 @@ export default function ShoppingCart() {
 
         <div className="w-full md:w-1/3 bg-gray-100 p-6 rounded-lg shadow-md h-auto min-h-[400px]">
           <h2 className="text-2xl font-bold mb-4">Resumen del Pedido</h2>
-          <Table>
-            <TableHeader>
-              <TableColumn>Imagen</TableColumn>
-              <TableColumn>Producto</TableColumn>
-              <TableColumn>Cantidad</TableColumn>
-              <TableColumn>Precio</TableColumn>
-              <TableColumn>Acciones</TableColumn>
-            </TableHeader>
-            <TableBody>
-              {cart.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <img
-                      src={item.image}
-                      alt={item.productName}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                  </TableCell>
-                  <TableCell>{item.productName}</TableCell>
-                  <TableCell>
-                    <Input
-                      type="number"
-                      min={0}
-                      value={String(item.quantity)}
-                      onChange={(e) => {
-                        const newQuantity = Number(e.target.value);
-                        updateQuantity(item.id, newQuantity);
-
-                        // Remove item if quantity is 0
-                        if (newQuantity === 0) {
-                          removeFromCart(item.id);
-                        }
-                      }}
-                      className="w-16"
-                    />
-                  </TableCell>
-                  <TableCell>S/. {item.productPrice.toFixed(2)}</TableCell>
-                  <TableCell>
-                    <Button
-                      color="danger"
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      Eliminar
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <div className="mt-4">
-            <p>
-              <strong>Subtotal:</strong> S/. {subtotal.toFixed(2)}
-            </p>
-            <p>
-              <strong>IGV (18%):</strong> S/. {igv.toFixed(2)}
-            </p>
-            <p>
-              <strong>Total:</strong> S/. {total.toFixed(2)}
-            </p>
-          </div>
 
           {loading && preferenceId ? (
             <FlowerSpinner />
           ) : preferenceId ? (
             <div>
-              <Wallet
-                initialization={
-                  {
+              {/* Tabla de productos en el carrito */}
+              <Table>
+                <TableHeader>
+                  <TableColumn>Imagen</TableColumn>
+                  <TableColumn>Producto</TableColumn>
+                  <TableColumn>Cantidad</TableColumn>
+                  <TableColumn>Precio</TableColumn>
+                  <TableColumn>Acciones</TableColumn>
+                </TableHeader>
+                <TableBody>
+                  {cart.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <img
+                          src={item.image}
+                          alt={item.productName}
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </TableCell>
+                      <TableCell>{item.productName}</TableCell>
+                      <TableCell>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={String(item.quantity)}
+                          onChange={(e) => {
+                            const newQuantity = Number(e.target.value);
+                            updateQuantity(item.id, newQuantity);
+
+                            // Eliminar el producto si la cantidad es 0
+                            if (newQuantity === 0) {
+                              removeFromCart(item.id);
+                            }
+                          }}
+                          className="w-16"
+                        />
+                      </TableCell>
+                      <TableCell>S/. {item.productPrice.toFixed(2)}</TableCell>
+                      <TableCell>
+                        <Button
+                          color="danger"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          Eliminar
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              {/* Resumen de los costos */}
+              <div className="mt-4">
+                <p>
+                  <strong>Subtotal:</strong> S/. {subtotal.toFixed(2)}
+                </p>
+                <p>
+                  <strong>IGV (18%):</strong> S/. {igv.toFixed(2)}
+                </p>
+                <p>
+                  <strong>Total:</strong> S/. {total.toFixed(2)}
+                </p>
+              </div>
+
+              {/* Componente de pago (Wallet) */}
+              <div>
+                <Wallet
+                  initialization={{
                     preferenceId,
                     redirectMode: "modal",
-                  } as any
-                }
-              />
+                  }}
+                />
+              </div>
             </div>
           ) : null}
         </div>
