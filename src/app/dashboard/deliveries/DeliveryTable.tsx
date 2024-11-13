@@ -46,6 +46,7 @@ const DeliveryTable: React.FC<DeliveryTableProps> = ({ pedidos, onSelectPedido }
               <td>{pedido.direccion}</td>
               <td>{pedido.pedido}</td>
               <td>{pedido.estado}</td>
+              <td data-status={pedido.estado}>{pedido.estado}</td>
             </tr>
           ))}
         </tbody>

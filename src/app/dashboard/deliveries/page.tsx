@@ -6,6 +6,8 @@ import React, { useState } from 'react';
 import DeliveryTable from './DeliveryTable';
 import DeliveryStatusModal from './DeliveryStatusModal';
 import { EstadoPedido } from './DeliveryStatus';
+import OrderDetails from "@/components/OrderDetails"
+
 
 interface Pedido {
   nombre: string;
@@ -24,42 +26,30 @@ const pedidosData: Pedido[] = [
   { nombre: 'Francis', apellido: 'Vinco', telefono: '777666555', documento: '13579086', tipoDocumento: 'DNI', direccion: 'Tupac Amaru', pedido: 'Sunflower basket', estado: 'Entregado' },
 ];
 
-const Page: React.FC = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPedido, setSelectedPedido] = useState<Pedido | null>(null);
+const DeliveryDashboard: React.FC = () => {
+  const [selectedPedido, setSelectedPedido] = useState([]as any)
 
-  const handleRowClick = (pedido: Pedido) => {
+  const handleOrderClick = (pedido: Pedido) => {
     setSelectedPedido(pedido);
-    setModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-    setSelectedPedido(null);
-  };
-
-  const handleStatusSave = (newStatus: EstadoPedido, justification: string) => {
-    if (selectedPedido) {
-      selectedPedido.estado = newStatus;
-      console.log('Justificación:', justification);
-    }
-    handleModalClose();
   };
 
   return (
     <div className="dashboard-container">
-      <h2>Dashboard de Repartidor</h2>
-      <DeliveryTable pedidos={pedidosData} onSelectPedido={handleRowClick} />
+      <h2>Dashboard de Entregas</h2>
+      <DeliveryTable pedidos={pedidosData} onSelectPedido={()=>handleOrderClick} />
+      
       {selectedPedido && (
-        <DeliveryStatusModal
-          isOpen={modalOpen}
-          currentStatus={selectedPedido.estado}
-          onClose={handleModalClose}
-          onSave={handleStatusSave}
+        <OrderDetails
+          orderId={selectedPedido.documento} // Assuming documento is unique for each pedido
+          products={[selectedPedido.pedido]} // Adjust this if you have a more complex product structure
+          customerName={`${selectedPedido.nombre} ${selectedPedido.apellido}`}
+          deliveryAddress={selectedPedido.direccion}
+          deliveryPerson="Repartidor asignado" // Replace with actual delivery person data if available
+          // Include any other props needed by OrderDetails
         />
       )}
     </div>
   );
 };
 
-export default Page;
+export default DeliveryDashboard;

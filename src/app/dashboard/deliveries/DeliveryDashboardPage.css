@@ -49,6 +49,23 @@
   cursor: pointer;
 }
 
+/* Diferentes estilos para el estado */
+.table tr td:last-child[data-status="En proceso"] {
+  color: orange;
+}
+
+.table tr td:last-child[data-status="En camino"] {
+  color: blue;
+}
+
+.table tr td:last-child[data-status="Entregado"] {
+  color: green;
+}
+
+.table tr td:last-child[data-status="Devuelto"] {
+  color: red;
+}
+
 /* Estilo del modal */
 .modal-container {
   position: fixed;
