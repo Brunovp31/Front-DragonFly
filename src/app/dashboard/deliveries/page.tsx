@@ -1,51 +1,136 @@
-// page.tsx
-
 "use client";
 
-import React, { useState } from 'react';
-import DeliveryTable from './DeliveryTable';
-import DeliveryStatusModal from './DeliveryStatusModal';
-import { EstadoPedido } from './DeliveryStatus';
-import OrderDetails from "@/components/OrderDetails"
+import React, { useState, useEffect, useCallback } from "react";
+import { Input, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, User } from "@nextui-org/react";
+import { EyeIcon } from "@/utils/icons/EyeIcon";
+import { EditIcon } from "@/utils/icons/EditIcon";
+import { DeleteIcon } from "@/utils/icons/DeleteIcon";
+import { getAllPedidos } from "@/services/delivery-service";  // Asegúrate de tener este servicio.
+import OrderDetails from "@/components/OrderDetails"; // Suponiendo que tienes este componente.
+import DeliveryStatusModal from './DeliveryStatusModal'; // Si lo necesitas.
+import FlowerSpinner from "@/utils/icons/FlowerSpinner";
 
+const DeliveryDashboard = () => {
+  const [pedidos, setPedidos] = useState([] as any);
+  const [loading, setLoading] = useState(true);
+  const [selectedPedido, setSelectedPedido] = useState(null as any);
+  const [openDetail, setOpenDetail] = useState(false);
 
-interface Pedido {
-  nombre: string;
-  apellido: string;
-  telefono: string;
-  documento: string;
-  tipoDocumento: string;
-  direccion: string;
-  pedido: string;
-  estado: EstadoPedido;
-}
+  useEffect(() => {
+    const fetchPedidos = async () => {
+      try {
+        const data = await getAllPedidos(); // Servicio para obtener los pedidos.
+        setPedidos(data);
+      } catch (error) {
+        console.error("Error al cargar pedidos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPedidos();
+  }, []);
 
-const pedidosData: Pedido[] = [
-  { nombre: 'Marco', apellido: 'Yataco', telefono: '999888777', documento: '76799829', tipoDocumento: 'DNI', direccion: 'Brisas de villa', pedido: 'Flores amarillas', estado: 'En proceso' },
-  { nombre: 'Jane', apellido: 'Smith', telefono: '888777666', documento: '87654321', tipoDocumento: 'Passport', direccion: '456 Oak Rd', pedido: 'Lilies arrangement', estado: 'En camino' },
-  { nombre: 'Francis', apellido: 'Vinco', telefono: '777666555', documento: '13579086', tipoDocumento: 'DNI', direccion: 'Tupac Amaru', pedido: 'Sunflower basket', estado: 'Entregado' },
-];
-
-const DeliveryDashboard: React.FC = () => {
-  const [selectedPedido, setSelectedPedido] = useState([]as any)
-
-  const handleOrderClick = (pedido: Pedido) => {
+  const handleOrderClick = (pedido: any) => {
     setSelectedPedido(pedido);
+    setOpenDetail(true);
   };
 
+  const handleDeletePedido = async (id: string) => {
+    try {
+      // Implementar la lógica para eliminar un pedido
+      // await deletePedido(id);
+      // Luego recargar los pedidos
+      setPedidos(pedidos.filter((pedido: any) => pedido.id !== id));
+    } catch (error) {
+      console.error("Error al eliminar pedido:", error);
+    }
+  };
+
+  const renderCell = useCallback((pedido: any, columnKey: string) => {
+    const cellValue = pedido[columnKey];
+    switch (columnKey) {
+      case "nombre":
+        return `${pedido.nombre} ${pedido.apellido}`;
+      case "pedido":
+        return pedido.pedido;
+      case "estado":
+        return pedido.estado;
+      case "acciones":
+        return (
+          <div className="relative flex items-center gap-2">
+            <Tooltip content="Detalles">
+              <span
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={() => handleOrderClick(pedido)}
+              >
+                <EyeIcon />
+              </span>
+            </Tooltip>
+            <Tooltip content="Eliminar pedido">
+              <span
+                className="text-lg text-danger cursor-pointer active:opacity-50"
+                onClick={() => handleDeletePedido(pedido.documento)}
+              >
+                <DeleteIcon />
+              </span>
+            </Tooltip>
+          </div>
+        );
+      default:
+        return cellValue;
+    }
+  }, []);
+
+  const columns = [
+    { name: "Cliente", uid: "nombre" },
+    { name: "Pedido", uid: "pedido" },
+    { name: "Estado", uid: "estado" },
+    { name: "Acciones", uid: "acciones" },
+  ];
+
   return (
-    <div className="dashboard-container">
-      <h2>Dashboard de Entregas</h2>
-      <DeliveryTable pedidos={pedidosData} onSelectPedido={()=>handleOrderClick} />
-      
+    <div className="flex flex-col gap-y-2 p-2">
+      <div className="flex justify-between px-10 items-center">
+        <Input
+          label="Buscador"
+          isClearable
+          radius="lg"
+          className="mr-2"
+          placeholder="Escribe para buscar ..."
+        />
+      </div>
+      {loading ? (
+        <div className="mt-8 flex justify-center items-center">
+          <FlowerSpinner />
+        </div>
+      ) : (
+        <Table aria-label="Delivery Table - DragonFly">
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column.uid}>{column.name}</TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={pedidos}>
+            {(item) => (
+              <TableRow key={item.documento}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
+
       {selectedPedido && (
         <OrderDetails
-          orderId={selectedPedido.documento} // Assuming documento is unique for each pedido
-          products={[selectedPedido.pedido]} // Adjust this if you have a more complex product structure
+          orderId={selectedPedido.documento}
+          products={selectedPedido.pedido} // Ajusta esto según la estructura del pedido.
           customerName={`${selectedPedido.nombre} ${selectedPedido.apellido}`}
           deliveryAddress={selectedPedido.direccion}
-          deliveryPerson="Repartidor asignado" // Replace with actual delivery person data if available
-          // Include any other props needed by OrderDetails
+          deliveryPerson="Repartidor asignado" // Este valor debería ser dinámico si tienes esa data.
+          open={openDetail}
+          onClose={() => setOpenDetail(false)}
         />
       )}
     </div>

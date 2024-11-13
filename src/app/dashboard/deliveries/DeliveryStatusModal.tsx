@@ -1,7 +1,7 @@
 // DeliveryStatusModal.tsx
 
 import React, { useState, useEffect } from 'react';
-import './DeliveryDashboardPage.css';
+import './DeliveryDashboardPage.tsx';
 
 interface DeliveryStatusModalProps {
   isOpen: boolean;

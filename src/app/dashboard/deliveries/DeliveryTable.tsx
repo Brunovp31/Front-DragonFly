@@ -1,7 +1,7 @@
 // DeliveryTable.tsx
 
 import React from 'react';
-import './DeliveryDashboardPage.css';
+import './DeliveryDashboardPage.tsx';
 
 interface Pedido {
   nombre: string;
