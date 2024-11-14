@@ -5,7 +5,6 @@ import { createOrder } from "@/services/order-service";
 import FlowerSpinner from "@/utils/icons/FlowerSpinner";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import {
-  Button,
   Input,
   Table,
   TableBody,
@@ -13,6 +12,9 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  Select,
+  SelectItem,
+
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -25,11 +27,20 @@ const documentRules: any = {
   Pasaporte: 9,
 };
 
+const distritosLima = [
+  "Barranco", "Breña", "Chorrillos", "Jesús María", 
+  "La Molina", "Lima", "Lince","Magdalena del Mar", 
+  "Miraflores","Pueblo Libre", "Rímac", "San Borja", 
+  "San Isidro", "San Juan de Miraflores", "San Luis", 
+  "San Martín de Porres", "San Miguel","Santiago de Surco", 
+  "Surquillo"
+
+];
+
 export default function ShoppingCart() {
   const { cart, removeFromCart, updateQuantity } = useCart();
   const [loading, setLoading] = useState(true);
   const [preferenceId, setPreferenceId] = useState("");
-
   const navigate = useRouter();
 
   useEffect(() => {
@@ -64,9 +75,12 @@ export default function ShoppingCart() {
     phone: "",
     documentType: "",
     documentNumber: "",
+    provincia: "Lima",
+    distrito: "",
     shippingAddress: "",
     deliveryDate: "",
     deliveryTime: "",
+    termsAccepted: false,
   });
   const [isValid, setIsValid] = useState(true);
   const [docError, setDocError] = useState("");
@@ -79,18 +93,20 @@ export default function ShoppingCart() {
     deliveryDate: false,
     deliveryTime: false,
     documentType: false,
+    termsAccepted: false,
+    distrito: false,
   });
 
   const documentTypes = ["DNI", "RUC", "Carnet de extranjería", "Pasaporte"];
-  const timeOptions = ["12:00 a 14:00", "15:00 a 17:00", "18:00 a 20:00"];
+  const timeOptions = [
+    "11:00 a 13:00", "12:00 a 14:00", "13:00 a 15:00", "14:00 a 16:00", 
+    "15:00 a 17:00", "16:00 a 18:00", "17:00 a 19:00", "18:00 a 20:00"];
 
-  // Calculate total
   const total = cart.reduce(
     (acc, item) => acc + item.productPrice * item.quantity,
     0
   );
-
-  const igvPercentage = 0.18; // 18%
+  const igvPercentage = 0.18;
   const subtotal = total / (1 + igvPercentage);
   const igv = total - subtotal;
 
@@ -105,6 +121,7 @@ export default function ShoppingCart() {
       if (value.length > maxLength) return;
       setDocError(
         value.length !== maxLength ? `Debe tener ${maxLength} caracteres` : ""
+          
       );
     }
 
@@ -113,7 +130,6 @@ export default function ShoppingCart() {
       [name]: value,
     }));
 
-    // Check if field is required and mark as invalid if empty
     setFieldErrors((prevErrors) => ({
       ...prevErrors,
       [name]:
@@ -130,7 +146,17 @@ export default function ShoppingCart() {
     setDocError("");
   };
 
+  const handleDistritoChange = (value: string) => {
+    setCustomerDetails((prevDetails) => ({
+      ...prevDetails,
+      distrito: value,
+    }));
+    // Aquí se debe centrar el mapa en el distrito seleccionado
+    // Actualiza la posición del mapa según sea necesario
+  };
+
   const handleProceedToPayment = () => {
+   
     window.open("https://mpago.la/2k1anq8", "_self");
   };
 
@@ -179,25 +205,22 @@ export default function ShoppingCart() {
               />
             </div>
             <div className="flex items-center gap-x-2 justify-between">
-              {/* <Select
+              <Select
                 label="Tipo de Documento"
-                name="documentType"
                 value={customerDetails.documentType}
-                onChange={(e) => handleDocumentTypeChange(e.target.value)}
+                onChange={(e) => handleDocumentTypeChange(e)}
                 required
                 className={fieldErrors.documentType ? "border-red-500" : ""}
               >
                 <SelectItem key="" value="">
                   Seleccionar...
                 </SelectItem>
-                <>
-                  {documentTypes.map((type: any) => (
-                    <SelectItem key={String(type)} value={String(type)}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </>
-              </Select> */}
+                {documentTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </Select>
               <Input
                 label="Número de Documento"
                 name="documentNumber"
@@ -211,6 +234,23 @@ export default function ShoppingCart() {
 
             <h2 className="text-2xl font-bold mb-4">Datos de envío</h2>
             <div className="flex items-center gap-x-2 justify-between">
+              <Select
+                label="Distrito"
+                name="distrito"
+                value={customerDetails.distrito}
+                onChange={(e) => handleDistritoChange(e)}
+                required
+                className={fieldErrors.distrito ? "border-red-500" : ""}
+              >
+                <SelectItem key="" value="">
+                  Seleccionar...
+                </SelectItem>
+                {distritosLima.map((distrito) => (
+                  <SelectItem key={distrito} value={distrito}>
+                    {distrito}
+                  </SelectItem>
+                ))}
+              </Select>
               <Input
                 type="date"
                 label="Fecha de Entrega"
@@ -220,7 +260,7 @@ export default function ShoppingCart() {
                 required
                 className={fieldErrors.deliveryDate ? "border-red-500" : ""}
               />
-              {/* <Select
+              <Select
                 label="Rango de Hora"
                 name="deliveryTime"
                 value={customerDetails.deliveryTime}
@@ -228,109 +268,95 @@ export default function ShoppingCart() {
                 required
                 className={fieldErrors.deliveryTime ? "border-red-500" : ""}
               >
-                <SelectItem key={""} value="">
+                <SelectItem key="" value="">
                   Seleccionar...
                 </SelectItem>
-                <>
-                  {timeOptions.map((time) => (
-                    <SelectItem key={String(time)} value={String(time)}>
-                      {time}
-                    </SelectItem>
-                  ))}
-                </>
-              </Select> */}
+                {timeOptions.map((time) => (
+                  <SelectItem key={time} value={time}>
+                    {time}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
+            <Input
+              label="Instrucciones de Entrega"
+              name="shippingAddress"
+              value={customerDetails.shippingAddress}
+              onChange={handleInputChange}
+              required
+              className={fieldErrors.shippingAddress ? "border-red-500" : ""}
+            />
+          
           </form>
-          {!isValid && (
-            <p className="text-red-500">
-              Por favor completa todos los campos obligatorios.
-            </p>
-          )}
+          <div className="flex items-center gap-x-2 justify-between">
+  <input
+    type="checkbox"
+    name="termsAccepted"
+    checked={customerDetails.termsAccepted}
+    onChange={(e) =>
+      setCustomerDetails((prevDetails) => ({
+        ...prevDetails,
+        termsAccepted: e.target.checked,
+      }))
+    }
+  />
+  <label htmlFor="terms">
+    Acepto los{" "}
+    <a href="/terminos-y-condiciones" className="text-blue-500">
+      términos y condiciones
+    </a>
+  </label>
+</div>
+{!customerDetails.termsAccepted && (
+  <p className="text-red-500 text-sm">Debe aceptar los términos y condiciones.</p>
+)}
         </div>
-
-        <div className="w-full md:w-1/3 bg-gray-100 p-6 rounded-lg shadow-md h-auto min-h-[400px]">
-          <h2 className="text-2xl font-bold mb-4">Resumen del Pedido</h2>
-
-          {loading && preferenceId == "" ? (
-            <FlowerSpinner />
-          ) : preferenceId ? (
-            <div>
-              {/* Tabla de productos en el carrito */}
-              <Table>
-                <TableHeader>
-                  <TableColumn>Imagen</TableColumn>
-                  <TableColumn>Producto</TableColumn>
-                  <TableColumn>Cantidad</TableColumn>
-                  <TableColumn>Precio</TableColumn>
-                  <TableColumn>Acciones</TableColumn>
-                </TableHeader>
-                <TableBody>
-                  {cart.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell>
-                        <img
-                          src={item.image}
-                          alt={item.productName}
-                          className="w-16 h-16 object-cover rounded"
-                        />
-                      </TableCell>
-                      <TableCell>{item.productName}</TableCell>
-                      <TableCell>
-                        <Input
-                          type="number"
-                          min={0}
-                          value={String(item.quantity)}
-                          onChange={(e) => {
-                            const newQuantity = Number(e.target.value);
-                            updateQuantity(item.id, newQuantity);
-
-                            // Eliminar el producto si la cantidad es 0
-                            if (newQuantity === 0) {
-                              removeFromCart(item.id);
-                            }
-                          }}
-                          className="w-16"
-                        />
-                      </TableCell>
-                      <TableCell>S/. {item.productPrice.toFixed(2)}</TableCell>
-                      <TableCell>
-                        <Button
-                          color="danger"
-                          onClick={() => removeFromCart(item.id)}
-                        >
-                          Eliminar
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
-              {/* Resumen de los costos */}
-              <div className="mt-4">
-                <p>
-                  <strong>Subtotal:</strong> S/. {subtotal.toFixed(2)}
-                </p>
-                <p>
-                  <strong>IGV (18%):</strong> S/. {igv.toFixed(2)}
-                </p>
-                <p>
-                  <strong>Total:</strong> S/. {total.toFixed(2)}
-                </p>
-              </div>
-
-              {/* Componente de pago (Wallet) */}
-              <div>
-                <Wallet
-                  initialization={{
-                    preferenceId,
-                    redirectMode: "modal",
-                  }}
-                />
-              </div>
-            </div>
-          ) : null}
+        <div className="w-full md:w-1/3 bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Resumen de la Orden</h2>
+          <Table>
+            <TableHeader>
+              <TableColumn>Producto</TableColumn>
+              <TableColumn>Precio</TableColumn>
+              <TableColumn>Cantidad</TableColumn>
+              <TableColumn>Total</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {cart.map((item) => (
+                <TableRow key={item.productId}>
+                  <TableCell>{item.productName}</TableCell>
+                  <TableCell>S/ {item.productPrice.toFixed(2)}</TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        updateQuantity(item.productId, Number(e.target.value))
+                      }
+                    />
+                  </TableCell>
+                  <TableCell>
+                    S/ {(item.productPrice * item.quantity).toFixed(2)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <div className="flex justify-between mt-4">
+            <p>Subtotal:</p>
+            <p>S/ {subtotal.toFixed(2)}</p>
+          </div>
+          <div className="flex justify-between">
+            <p>IGV (18%):</p>
+            <p>S/ {igv.toFixed(2)}</p>
+          </div>
+          <div className="flex justify-between font-bold">
+            <p>Total:</p>
+            <p>S/ {total.toFixed(2)}</p>
+          </div>
+          <Wallet initialization={{ preferenceId }} />
+          {loading && <FlowerSpinner />}
         </div>
+        
       </div>
       <Map />
     </div>
