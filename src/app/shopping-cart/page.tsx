@@ -302,7 +302,7 @@ export default function ShoppingCart() {
   />
   <label htmlFor="terms">
     Acepto los{" "}
-    <a href="/terminos-y-condiciones" className="text-blue-500">
+    <a href="/terminos-condiciones" className="text-blue-500">
       términos y condiciones
     </a>
   </label>
