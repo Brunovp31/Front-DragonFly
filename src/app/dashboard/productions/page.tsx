@@ -9,7 +9,6 @@ import { EyeIcon } from "@/utils/icons/EyeIcon";
 import { SearchIcon } from "@/utils/icons/SearchIcon";
 import {
   Input,
-  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -18,63 +17,85 @@ import {
   TableRow,
   Tooltip,
 } from "@nextui-org/react";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import CreateProductionDashboard from "../components/Productions/create-production-dashboard";
 import UpdateDetailProduction from "../components/Productions/update-detail-production-dashboard";
 import FlowerSpinner from "@/utils/icons/FlowerSpinner";
 
 export default function ProductionsDashboard() {
-  const [productions, setProductions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Datos simulados para la tabla
+  const [productions, setProductions] = useState([
+    {
+      id: "1",
+      plantType: "Rosa",
+      color: "Rojo",
+      category: "Flor",
+      quantity: 50,
+      status: "Disponible",
+      skuCode: "FLR001",
+    },
+    {
+      id: "2",
+      plantType: "Girasol",
+      color: "Amarillo",
+      category: "Flor",
+      quantity: 30,
+      status: "Disponible",
+      skuCode: "FLR002",
+    },
+    {
+      id: "3",
+      plantType: "Cactus",
+      color: "Verde",
+      category: "Suculenta",
+      quantity: 15,
+      status: "Agotado",
+      skuCode: "SUC001",
+    },
+  ]);
+
+  const [loading, setLoading] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
   const [currentProduction, setCurrentProduction] = useState(null) as any;
   const [modalType, setModalType] = useState("details");
 
-  useEffect(() => {
-    const fetchProductions = async () => {
-      try {
-        const data = await getAllProductions();
-        setProductions(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProductions();
-  }, []);
-
-  const handleDeleteProduction = async (id: string) => {
-    try {
-      await deleteProduction(id);
-      handleReload();
-    } catch (error) {
-      console.error("Error al eliminar un registro:", error);
-    }
-  };
-
-  const handleReload = async () => {
-    setLoading(true);
-    const data = await getAllProductions();
-    setProductions(data);
-    setLoading(false);
-  };
-
-  const renderCell = useCallback((production: any, columnKey: any) => {
+  const renderCell = (production: any, columnKey: any) => {
     const cellValue = production[columnKey];
     switch (columnKey) {
       case "plantType":
-        return production.plantType;
+        // Simulación de imagen asociada al tipo de planta
+        return (
+          <div className="flex items-center gap-2">
+            <img
+              src={`/images/plants/${production.plantType.toLowerCase()}.png`}
+              alt={production.plantType}
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+            <span>{production.plantType}</span>
+          </div>
+        );
       case "color":
-        return production.color;
+        return <span>{production.color}</span>;
       case "category":
-        return production.category;
+        return <span>{production.category}</span>;
       case "quantity":
-        return production.quantity;
+        return <span>{production.quantity}</span>;
       case "status":
-        return production.status;
+        return (
+          <span
+            className={`px-2 py-1 rounded ${
+              cellValue === "Disponible"
+                ? "bg-green-200 text-green-700"
+                : "bg-red-200 text-red-700"
+            }`}
+          >
+            {cellValue}
+          </span>
+        );
       case "skuCode":
-        return production.skuCode;
+        return <span>{production.skuCode}</span>;
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
@@ -105,7 +126,7 @@ export default function ProductionsDashboard() {
             <Tooltip color="danger" content="Eliminar">
               <span
                 className="text-lg text-danger cursor-pointer active:opacity-50"
-                onClick={() => handleDeleteProduction(production.id)}
+                onClick={() => console.log(`Eliminar: ${production.id}`)}
               >
                 <DeleteIcon />
               </span>
@@ -115,7 +136,7 @@ export default function ProductionsDashboard() {
       default:
         return cellValue;
     }
-  }, []);
+  };
 
   const columns = [
     { name: "Tipo de Planta", uid: "plantType" },
@@ -140,12 +161,7 @@ export default function ProductionsDashboard() {
             <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
           }
         />
-        <CreateProductionDashboard
-          handleReload={async () => {
-            setLoading(true);
-            await handleReload();
-          }}
-        />
+        <CreateProductionDashboard handleReload={() => console.log("Reload")} />
       </div>
       {loading ? (
         <div className="mt-8 flex justify-center items-center">
@@ -154,9 +170,7 @@ export default function ProductionsDashboard() {
       ) : (
         <Table aria-label="Productions Table">
           <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.uid}>{column.name}</TableColumn>
-            )}
+            {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
           </TableHeader>
           <TableBody items={productions}>
             {(item: any) => (
@@ -175,12 +189,10 @@ export default function ProductionsDashboard() {
           open={openDetail}
           type={modalType}
           onClose={() => setOpenDetail(false)}
-          handleReload={async () => {
-            setLoading(true);
-            await handleReload();
-          }}
+          handleReload={() => console.log("Reload")}
         />
       )}
     </div>
   );
 }
+
