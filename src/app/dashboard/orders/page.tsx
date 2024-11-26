@@ -157,57 +157,61 @@ export default function UsersDashboard() {
                 )}
               </ModalHeader>
               <ModalBody>
-                {selectedOrder && (
-                  <div className="p-4 text-gray-800">
-                    <ul className="space-y-4">
-                      {selectedOrder.products.map(
-                        (productItem: any, index: any) => (
-                          <li
-                            key={index}
-                            className="flex items-center border-b pb-4 border-gray-200"
-                          >
-                            <img
-                              src={productItem.product.image}
-                              alt={productItem.product.name}
-                              className="w-16 h-16 object-cover rounded-lg mr-4"
-                            />
-                            <div className="flex-1">
-                              <h4 className="text-lg font-medium text-gray-900">
-                                {productItem.product.name}
-                              </h4>
-                              <p className="text-sm text-gray-600">
-                                Color: {productItem.product.color}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                Cantidad:{" "}
-                                <strong>{productItem.quantity}</strong>
-                              </p>
-                              <p className="text-sm font-semibold text-gray-800">
-                                Total: $
-                                {(
-                                  productItem.product.price *
-                                  productItem.quantity
-                                ).toFixed(2)}
-                              </p>
-                            </div>
-                          </li>
-                        )
-                      )}
-                    </ul>
-                    <div className="mt-4 text-right font-bold text-gray-900">
-                      Total del Pedido: $
-                      {selectedOrder.products
-                        .reduce(
-                          (acc: number, productItem: any) =>
-                            acc +
-                            productItem.product.price * productItem.quantity,
-                          0
-                        )
-                        .toFixed(2)}
-                    </div>
-                  </div>
-                )}
-              </ModalBody>
+  {selectedOrder ? (
+    <div className="p-6 text-gray-800 space-y-6 bg-white rounded-lg shadow-lg">
+      <ul className="space-y-6">
+        {selectedOrder.products?.length > 0 ? (
+          selectedOrder.products.map((productItem: any, index: number) => (
+            <li key={index} className="flex items-center border-b pb-6 border-gray-300">
+              <img
+                src={productItem.product?.image || "/path/to/default-image.jpg"}
+                alt={productItem.product?.name || "Producto sin nombre"}
+                className="w-20 h-20 object-cover rounded-lg mr-6"
+              />
+              <div className="flex-1">
+                <h4 className="text-xl font-semibold text-gray-900">
+                  {productItem.product?.name || "Producto sin nombre"}
+                </h4>
+                <p className="text-sm text-gray-600">Color: {productItem.product?.color || "Sin color"}</p>
+                <p className="text-sm text-gray-600">Cantidad: <strong>{productItem.quantity}</strong></p>
+                <p className="text-sm font-semibold text-gray-800">Total: ${(
+                  productItem.product?.price * productItem.quantity
+                ).toFixed(2)}</p>
+              </div>
+            </li>
+          ))
+        ) : (
+          <p>No hay productos en esta orden.</p>
+        )}
+      </ul>
+
+      {/* Detalles del cliente */}
+      <div className="mt-6 bg-gray-50 p-6 rounded-lg shadow-md">
+        <h4 className="font-semibold text-xl text-gray-900 mb-4">Detalles del Cliente</h4>
+        <p><strong className="text-gray-700">Nombre:</strong> {selectedOrder.user.firstName} {selectedOrder.user.lastName}</p>
+        <p><strong className="text-gray-700">Correo:</strong> {selectedOrder.user.email}</p>
+        <p><strong className="text-gray-700">Teléfono:</strong> {selectedOrder.user.phone}</p>
+        <p><strong className="text-gray-700">Documento:</strong> {selectedOrder.user.documentNumber}</p>
+        <p><strong className="text-gray-700">Dirección de Envío:</strong> {selectedOrder.shippingAddress}</p>
+        <p><strong className="text-gray-700">Fecha de Entrega:</strong> {selectedOrder.deliveryDate}</p>
+        <p><strong className="text-gray-700">Horario de Entrega:</strong> {selectedOrder.deliveryTime}</p>
+      </div>
+
+      {/* Total del pedido */}
+      <div className="mt-6 text-right font-bold text-xl text-gray-900">
+        Total del Pedido: $
+        {selectedOrder.products.reduce(
+          (acc: number, productItem: any) =>
+            acc + (productItem.product?.price || 0) * productItem.quantity,
+          0
+        ).toFixed(2)}
+      </div>
+    </div>
+  ) : (
+    <p>No se ha seleccionado una orden.</p>
+  )}
+</ModalBody>
+
             </>
           )}
         </ModalContent>
