@@ -18,21 +18,24 @@ import {
 } from "@nextui-org/react";
 import { useCallback, useEffect, useState } from "react";
 import CreateProductDashboard from "../components/products/create-product-dashboard";
-import UpdateDetailProduct from "../components/products/update-detail-product-dashboard"; // Assuming you have this component
+import UpdateDetailProduct from "../components/products/update-detail-product-dashboard"; 
 import FlowerSpinner from "@/utils/icons/FlowerSpinner";
 
 export default function ProductsDashboard() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]); // Productos originales
+  const [filteredProducts, setFilteredProducts] = useState([]); // Productos filtrados
   const [loading, setLoading] = useState(true);
   const [openDetail, setOpenDetail] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null) as any;
   const [modalType, setModalType] = useState("details");
+  const [searchText, setSearchText] = useState(""); // Texto del buscador
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const data = await getAllProducts();
         setProducts(data);
+        setFilteredProducts(data); // Inicializa los productos filtrados
       } catch (error) {
         console.error(error);
       } finally {
@@ -55,7 +58,22 @@ export default function ProductsDashboard() {
     setLoading(true);
     const data = await getAllProducts();
     setProducts(data);
+    setFilteredProducts(data); // Reinicia los productos filtrados
     setLoading(false);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchText(value);
+    if (value.trim() === "") {
+      setFilteredProducts(products); // Muestra todos los productos si no hay texto
+    } else {
+      const lowercasedValue = value.toLowerCase();
+      const filtered = products.filter((product: any) =>
+        product.name.toLowerCase().includes(lowercasedValue) || // Filtra por nombre
+        product.category?.name?.toLowerCase().includes(lowercasedValue) // Filtra por categoría
+      );
+      setFilteredProducts(filtered);
+    }
   };
 
   const renderCell = useCallback((product: any, columnKey: any) => {
@@ -70,7 +88,7 @@ export default function ProductsDashboard() {
           />
         );
       case "category":
-        return product.category ? product.category.name : "Sin categoria";
+        return product.category ? product.category.name : "Sin categoría";
       case "price":
         return `$${cellValue}`;
       case "stock":
@@ -153,6 +171,8 @@ export default function ProductsDashboard() {
           radius="lg"
           className="mr-2"
           placeholder="Escribe para buscar ..."
+          value={searchText}
+          onChange={(e) => handleSearch(e.target.value)}
           startContent={
             <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
           }
@@ -170,7 +190,7 @@ export default function ProductsDashboard() {
               <TableColumn key={column.uid}>{column.name}</TableColumn>
             )}
           </TableHeader>
-          <TableBody items={products}>
+          <TableBody items={filteredProducts}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
