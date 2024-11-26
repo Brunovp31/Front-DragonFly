@@ -1,4 +1,5 @@
-"use client";
+"use client"; // Add this line to mark the component as a client component
+
 import React, { useEffect, useState } from "react";
 import ProductCard from "@/components/product-card";
 import { getAllProducts } from "@/services/product-service";
@@ -16,7 +17,6 @@ interface Product {
   hoverImage: string;
 }
 
-// Actualizamos las categorías
 const CATEGORIES = [
   "Abono Orgánico",
   "Flores",
@@ -35,7 +35,7 @@ export default function Catalogo() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [priceRange, setPriceRange] = useState<[number, number]>([MIN_PRICE, MAX_PRICE]);
-  const [sortOption, setSortOption] = useState<string>("default"); // Nueva variable para ordenar
+  const [sortOption, setSortOption] = useState<string>("default");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,7 +53,6 @@ export default function Catalogo() {
     fetchProducts();
   }, []);
 
-  // Aplicar filtros
   const applyFilters = () => {
     let filteredProducts = products
       .filter((product) =>
@@ -64,7 +63,6 @@ export default function Catalogo() {
           product.price >= priceRange[0] && product.price <= priceRange[1]
       );
 
-    // Aplicar ordenamiento
     switch (sortOption) {
       case "low-to-high":
         filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
@@ -84,10 +82,17 @@ export default function Catalogo() {
 
   const filteredProducts = applyFilters();
 
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <FlowerSpinner />
+      </div>
+    );
+  }
+
   return (
     <main className="container mx-auto p-6 flex">
       <aside className="w-1/4 pr-6 border-r border-gray-300">
-        {/* Filtros de categoría */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Categorías</h2>
           <ul className="space-y-2 text-gray-600">
@@ -101,9 +106,7 @@ export default function Catalogo() {
               <li
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`cursor-pointer ${
-                  selectedCategory === category ? "font-bold text-black" : ""
-                }`}
+                className={`cursor-pointer ${selectedCategory === category ? "font-bold text-black" : ""}`}
               >
                 {category}
               </li>
@@ -111,7 +114,6 @@ export default function Catalogo() {
           </ul>
         </div>
 
-        {/* Filtro de precio */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Filtrar por Precio</h2>
           <Range
@@ -162,7 +164,6 @@ export default function Catalogo() {
       </aside>
 
       <section className="w-3/4 pl-6">
-        {/* Menú desplegable para ordenar */}
         <div className="flex justify-end mb-6">
           <select
             value={sortOption}
@@ -176,32 +177,23 @@ export default function Catalogo() {
           </select>
         </div>
 
-        {/* Productos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading ? (
-            <div className="mt-8 flex justify-center items-center">
-              <FlowerSpinner />
+          {filteredProducts.length === 0 ? (
+            <div className="text-center text-gray-500">
+              No hay productos disponibles
             </div>
           ) : (
-            <>
-              {filteredProducts.length === 0 ? (
-                <div className="text-center text-gray-500">
-                  No hay productos disponibles
-                </div>
-              ) : (
-                filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    id={product.id}
-                    image={product.image}
-                    hoverImage={product.hoverImage}
-                    productName={product.name}
-                    productDescription={product.description}
-                    productPrice={product.price}
-                  />
-                ))
-              )}
-            </>
+            filteredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                image={product.image}
+                hoverImage={product.hoverImage}
+                productName={product.name}
+                productDescription={product.description}
+                productPrice={product.price}
+              />
+            ))
           )}
         </div>
       </section>
