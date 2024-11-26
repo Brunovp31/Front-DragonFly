@@ -35,7 +35,7 @@ export default function NavbarCustom({
   const path = usePathname();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { cart, clearCart } = useCart();
+  const { cart, clearCart, updateQuantity } = useCart();  // Usamos `updateQuantity` aquí
 
   const items = [
     { label: "Home", href: "/" },
@@ -45,6 +45,11 @@ export default function NavbarCustom({
   ];
 
   const badgeTotal = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  const handleCartClick = (e: React.MouseEvent) => {
+    // Evita que el clic en el carrito cierre el menú
+    e.stopPropagation();
+  };
 
   return (
     <>
@@ -98,7 +103,7 @@ export default function NavbarCustom({
             <NavbarItem>
               <Dropdown className="select-none">
                 <DropdownTrigger>
-                  <Button variant="light">
+                  <Button variant="light" onClick={handleCartClick}>
                     <Badge
                       color="danger"
                       content={badgeTotal}
@@ -111,49 +116,91 @@ export default function NavbarCustom({
                 </DropdownTrigger>
 
                 <DropdownMenu>
-                  <DropdownItem
-                    key="shopping-cart"
-                    onClick={() => router.push("/shopping-cart")}
-                  >
+                  <DropdownItem key="shopping-cart">
                     {cart.length === 0 ? (
-                      <p>No hay productos en el carrito</p>
+                      <p className="text-center">No hay productos en el carrito</p>
                     ) : (
-                      <table>
-                        <tbody>
+                      <div className="w-80 p-4">
+                        <div className="max-h-64 overflow-y-auto">
                           {cart.map((item: any) => (
-                            <tr
+                            <div
                               key={item.id}
-                              className="flex items-center gap-x-4 my-2"
+                              className="flex items-center justify-between border-b pb-4 mb-4"
                             >
-                              <td>
+                              <div className="flex items-center gap-4">
                                 <img
                                   src={item.image}
-                                  alt={item.name}
-                                  width={40}
-                                  height={40}
+                                  alt={item.productName}
+                                  width={50}
+                                  height={50}
+                                  className="rounded"
                                 />
-                              </td>
-                              <td>
-                                <p>
-                                  {item.productName} ({item.quantity})
-                                </p>
-                                <p>{item.productPrice}</p>
-                              </td>
-                            </tr>
+                                <div>
+                                  <p className="text-sm font-medium">
+                                    {item.productName}
+                                  </p>
+                                  <p className="text-sm text-gray-500">
+                                    S/ {item.productPrice.toFixed(2)}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() =>
+                                    updateQuantity(item.id, item.quantity - 1)
+                                  }
+                                  className="p-1 border rounded"
+                                >
+                                  -
+                                </button>
+                                <span>{item.quantity}</span>
+                                <button
+                                  onClick={() =>
+                                    updateQuantity(item.id, item.quantity + 1)
+                                  }
+                                  className="p-1 border rounded"
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
                           ))}
-                        </tbody>
-                      </table>
+                        </div>
+                        <div className="border-t pt-4">
+                          <div className="flex justify-between text-sm">
+                            <p>Subtotal:</p>
+                            <p>
+                              S/{" "}
+                              {cart
+                                .reduce(
+                                  (acc, item) =>
+                                    acc + item.productPrice * item.quantity,
+                                  0
+                                )
+                                .toFixed(2)}
+                            </p>
+                          </div>
+                          <Button
+                            className="mt-4 w-full"
+                            onClick={() => router.push("/shopping-cart")}
+                          >
+                            Ir al carrito
+                          </Button>
+                        </div>
+                      </div>
                     )}
-                    <hr className="mt-4" />
                   </DropdownItem>
-                  <DropdownItem
-                    key="delete"
-                    color="danger"
-                    startContent={<DeleteIcon className="text-xl" />}
-                    onClick={() => clearCart()}
-                  >
-                    Eliminar
-                  </DropdownItem>
+
+                  {cart.length > 0 && (
+                    <DropdownItem
+                      key="delete"
+                      color="danger"
+                      startContent={<DeleteIcon className="text-xl" />}
+                      onClick={() => clearCart()}
+                    >
+                      Vaciar carrito
+                    </DropdownItem>
+                  )}
                 </DropdownMenu>
               </Dropdown>
             </NavbarItem>

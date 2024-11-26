@@ -22,7 +22,7 @@ export default function Carousel() {
         <div className="embla__container">
           <div className="embla__slide" key={1}>
             <img
-              src="https://i.ytimg.com/vi/qd68NBQQeRs/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGEggWChlMA8=&rs=AOn4CLBrdaXLjsF9oOyLUENmbIg4rj6Feg"
+              src=""
               alt="carousel"
               width={1200}
               className="rounded-lg"

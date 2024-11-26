@@ -69,7 +69,7 @@ export default function Dashboard() {
           </motion.p>
         </div>
         <motion.img
-          src="https://www.disfrazzes.com/blog/wp-content/uploads/2016/01/disfraz-del-negro-del-whatsapp-880x660.jpg"
+          src=""
           alt="Flores decorativas"
           className="w-32 h-32 rounded-full shadow-lg object-cover"
           initial={{ scale: 0.8, opacity: 0 }}
@@ -166,28 +166,28 @@ export default function Dashboard() {
         </motion.h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <motion.img
-            src="https://elcronista.co/assets/media/el-negro-del-whatsapp-montaje-o-realidad.jpg"
+            src=""
             alt="Anturio"
             className="w-full h-72 object-cover rounded-lg shadow-md"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           />
           <motion.img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvhZO2pLTsLmHVkqH3cZFwuq_ljbLbroDX1g&s"
+            src=""
             alt="Orquídea"
             className="w-full h-72 object-cover rounded-lg shadow-md"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           />
           <motion.img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWM0Sd1s7zKZNDkr59XNirT-puYVg9HtaG_Q&s"
+            src=""
             alt="Flor variada"
             className="w-full h-72 object-cover rounded-lg shadow-md"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           />
           <motion.img
-            src="https://i.ytimg.com/vi/qd68NBQQeRs/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGEggWChlMA8=&rs=AOn4CLBrdaXLjsF9oOyLUENmbIg4rj6Feg"
+            src=""
             alt="Tienda de flores"
             className="w-full h-72 object-cover rounded-lg shadow-md"
             whileHover={{ scale: 1.05 }}

@@ -95,12 +95,8 @@ const LibroReclamaciones = () => {
         <form id="formSubmit" method="post" action="">
         <div className="grid grid-cols-1 gap-4">
           <Select placeholder="Tienda" required aria-label="Tienda">
-            <SelectItem key="tienda1">Tienda 1</SelectItem>
-            <SelectItem key="tienda2">Tienda 2</SelectItem>
-            <SelectItem key="tienda3">Tienda 3</SelectItem>
-            <SelectItem key="tienda4">Tienda 4</SelectItem>
-            <SelectItem key="tienda5">Tienda 5</SelectItem>
-          </Select>
+            <SelectItem key="tiendaVirtual">Tienda Virtual</SelectItem>
+            </Select>
           <Input placeholder="Razón Social" required />
           <Input placeholder="RUC" required />
           <Input placeholder="Dirección" required />
@@ -116,6 +112,7 @@ const LibroReclamaciones = () => {
               <SelectItem key="dni">DNI</SelectItem>
               <SelectItem key="pasaporte">Pasaporte</SelectItem>
               <SelectItem key="carne">Carné de extranjería</SelectItem>
+              <SelectItem key="ruc">RUC</SelectItem>
             </Select>
             <Input placeholder="Documento de identidad" required />
             <Input
