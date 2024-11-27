@@ -20,34 +20,36 @@ const LibroReclamaciones = () => {
 
   const handleDepartamentoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedDepartamento = e.target.value;
+
     setDepartamento(selectedDepartamento);
 
     switch (selectedDepartamento) {
-      case "Amazonas":
-        setProvincias(["Provincia 1", "Provincia 2"]);
+      case "amazonas":
+        setProvincias(["Provincia 1", "Provincia 2"]);        
         break;
-      case "Ancash":
-        setProvincias(["Provincia 3"]);
+      case "ancash":
+        setProvincias(["Provincia 3"]);        
         break;
-      default:
+      default:        
         setProvincias([]);
     }
-    setProvincia("");
+      
     setDistritos([]);
   };
 
   const handleProvinciaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedProvincia = e.target.value;
+
     setProvincia(selectedProvincia);
 
     switch (selectedProvincia) {
-      case "Provincia 1":
+      case "provincia 1":
         setDistritos(["Distrito 1", "Distrito 2"]);
         break;
-      case "Provincia 2":
+      case "provincia 2":
         setDistritos(["Distrito 3", "Distrito 4"]);
         break;
-      case "Provincia 3":
+      case "provincia 3":
         setDistritos(["Distrito 5", "Distrito 6"]);
         break;
       default:
@@ -128,12 +130,12 @@ const LibroReclamaciones = () => {
             </Select>
             <Select placeholder="Provincia" required aria-label="Provincia" onChange={handleProvinciaChange} value={provincia}>
               {provincias.map((prov, index) => (
-                <SelectItem key={index} value={prov}>{prov}</SelectItem>
+                <SelectItem key={prov.toLowerCase()} value={prov}>{prov}</SelectItem>
               ))}
             </Select>
             <Select placeholder="Distrito" required aria-label="Distrito" value={distritos}>
               {distritos.map((dist, index) => (
-                <SelectItem key={index} value={dist}>{dist}</SelectItem>
+                <SelectItem key={dist.toLowerCase()} value={dist}>{dist}</SelectItem>
               ))}
             </Select>
             <Input placeholder="Correo electrónico" type="email" required />
