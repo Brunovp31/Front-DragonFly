@@ -14,7 +14,6 @@ import {
   TableRow,
   Select,
   SelectItem,
-
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -34,7 +33,6 @@ const distritosLima = [
   "San Isidro", "San Juan de Miraflores", "San Luis", 
   "San Martín de Porres", "San Miguel","Santiago de Surco", 
   "Surquillo"
-
 ];
 
 export default function ShoppingCart() {
@@ -121,7 +119,6 @@ export default function ShoppingCart() {
       if (value.length > maxLength) return;
       setDocError(
         value.length !== maxLength ? `Debe tener ${maxLength} caracteres` : ""
-          
       );
     }
 
@@ -151,12 +148,9 @@ export default function ShoppingCart() {
       ...prevDetails,
       distrito: value,
     }));
-    // Aquí se debe centrar el mapa en el distrito seleccionado
-    // Actualiza la posición del mapa según sea necesario
   };
 
   const handleProceedToPayment = () => {
-   
     window.open("https://mpago.la/2k1anq8", "_self");
   };
 
@@ -268,9 +262,6 @@ export default function ShoppingCart() {
                 required
                 className={fieldErrors.deliveryTime ? "border-red-500" : ""}
               >
-                <SelectItem key="" value="">
-                  Seleccionar...
-                </SelectItem>
                 {timeOptions.map((time) => (
                   <SelectItem key={time} value={time}>
                     {time}
@@ -278,87 +269,90 @@ export default function ShoppingCart() {
                 ))}
               </Select>
             </div>
+
             <Input
-              label="Instrucciones de Entrega"
+              label="Dirección de Envío"
               name="shippingAddress"
               value={customerDetails.shippingAddress}
               onChange={handleInputChange}
               required
               className={fieldErrors.shippingAddress ? "border-red-500" : ""}
             />
-          
+
+            <div className="flex items-center gap-x-2">
+              <Input
+                type="checkbox"
+                checked={customerDetails.termsAccepted}
+                onChange={(e) => {
+                  setCustomerDetails((prevDetails) => ({
+                    ...prevDetails,
+                    termsAccepted: e.target.checked,
+                  }));
+                  setFieldErrors((prevErrors) => ({
+                    ...prevErrors,
+                    termsAccepted: !e.target.checked,
+                  }));
+                }}
+              />
+              <label>Acepto los términos y condiciones</label>
+            </div>
+
+            <div className="mt-6">
+              <button
+                type="button"
+                disabled={Object.values(fieldErrors).includes(true)}
+                className="bg-blue-600 text-white py-2 px-4 rounded-lg"
+                onClick={handleProceedToPayment}
+              >
+                Proceder al Pago
+              </button>
+            </div>
           </form>
-          <div className="flex items-center gap-x-2 justify-between">
-  <input
-    type="checkbox"
-    name="termsAccepted"
-    checked={customerDetails.termsAccepted}
-    onChange={(e) =>
-      setCustomerDetails((prevDetails) => ({
-        ...prevDetails,
-        termsAccepted: e.target.checked,
-      }))
-    }
-  />
-  <label htmlFor="terms">
-    Acepto los{" "}
-    <a href="/terminos-condiciones" className="text-blue-500">
-      términos y condiciones
-    </a>
-  </label>
+        </div>
+
+        <div className="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-md">
+  <h2 className="text-2xl font-bold mb-4">Resumen de Pedido</h2>
+  <Table aria-label="Resumen de Carrito">
+    <TableHeader>
+      <TableColumn>Producto</TableColumn>
+      <TableColumn>Imagen</TableColumn>
+      <TableColumn>Cantidad</TableColumn>
+      <TableColumn>Subtotal</TableColumn>
+    </TableHeader>
+    <TableBody>
+      {cart.map((item, index) => (
+        <TableRow key={index}>
+          <TableCell>{item.productName}</TableCell>
+          <TableCell>
+            {item.productImage && (
+              <img
+                src={item.productImage}
+                alt={item.productName}
+                className="w-12 h-12 object-cover"
+              />
+            )}
+          </TableCell>
+          <TableCell>{item.quantity}</TableCell>
+          <TableCell>{(item.productPrice * item.quantity).toFixed(2)}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+  <div className="mt-4 flex justify-between">
+    <span>Subtotal:</span>
+    <span>S/ {subtotal.toFixed(2)}</span>
+  </div>
+  <div className="mt-2 flex justify-between">
+    <span>IGV (18%):</span>
+    <span>S/ {igv.toFixed(2)}</span>
+  </div>
+  <div className="mt-2 flex justify-between font-bold">
+    <span>Total:</span>
+    <span>S/ {total.toFixed(2)}</span>
+  </div>
 </div>
-{!customerDetails.termsAccepted && (
-  <p className="text-red-500 text-sm">Debe aceptar los términos y condiciones.</p>
-)}
-        </div>
-        <div className="w-full md:w-1/3 bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold mb-4">Resumen de la Orden</h2>
-          <Table>
-            <TableHeader>
-              <TableColumn>Producto</TableColumn>
-              <TableColumn>Precio</TableColumn>
-              <TableColumn>Cantidad</TableColumn>
-              <TableColumn>Total</TableColumn>
-            </TableHeader>
-            <TableBody>
-              {cart.map((item) => (
-                <TableRow key={item.productId}>
-                  <TableCell>{item.productName}</TableCell>
-                  <TableCell>S/ {item.productPrice.toFixed(2)}</TableCell>
-                  <TableCell>
-                    <Input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) =>
-                        updateQuantity(item.productId, Number(e.target.value))
-                      }
-                    />
-                  </TableCell>
-                  <TableCell>
-                    S/ {(item.productPrice * item.quantity).toFixed(2)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <div className="flex justify-between mt-4">
-            <p>Subtotal:</p>
-            <p>S/ {subtotal.toFixed(2)}</p>
-          </div>
-          <div className="flex justify-between">
-            <p>IGV (18%):</p>
-            <p>S/ {igv.toFixed(2)}</p>
-          </div>
-          <div className="flex justify-between font-bold">
-            <p>Total:</p>
-            <p>S/ {total.toFixed(2)}</p>
-          </div>
-          <Wallet initialization={{ preferenceId }} />
-          {loading && <FlowerSpinner />}
-        </div>
-        
+
       </div>
-      <Map />
     </div>
   );
 }
