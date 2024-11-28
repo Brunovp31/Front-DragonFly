@@ -30,9 +30,9 @@ export default function ProductCard({
   return (
     <Card className="py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+        <h4 className="font-bold text-sm">{productName}</h4>
         <p className="text-tiny uppercase font-bold">{productDescription}</p>
         <small className="text-default-500">S/.{productPrice}</small>
-        <h4 className="font-bold text-sm">{productName}</h4>
       </CardHeader>
       <div
         onMouseEnter={() => setCurrentImage(hoverImage)}

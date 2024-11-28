@@ -31,12 +31,12 @@ export default function ProductModal({
           backdrop:
             "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
         }}
-        className="w-full max-w-3xl"
+        className="w-full max-w-2xl"
       >
         <ModalContent>
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              {product.productName} - S/. {product.productPrice}
+            <ModalHeader className="text-s flex flex-col gap-2">
+              {product.productDescription} 
             </ModalHeader>
             <ModalBody>
               <div
@@ -50,11 +50,12 @@ export default function ProductModal({
                   <img
                     src={product.image}
                     alt="Orquídea"
-                    className="rounded-xl w-80 h-80 object-cover "
+                    className="rounded-xl w-80 h-80 object-cover mb-4"
                   />
                 </div>
-                <div className="flex flex-col items-center gap-y-20 justify-center w-1/2">
-                  <p className="text-sm">{product.productDescription}</p>
+                <div className="flex flex-col items-center gap-y-5 justify-center w-1/2">
+                  <p className="text-sm"> Categoría: {product.productName}</p>
+                  <p className="text-sm"> Precio: S/.{product.productPrice}</p>
                   <Button
                     color="success"
                     endContent={<FaPlus />}
