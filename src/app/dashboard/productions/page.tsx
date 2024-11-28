@@ -48,7 +48,7 @@ export default function ProductionsDashboard() {
       plantType: "Cactus",
       color: "Verde",
       category: "Suculenta",
-      quantity: 5,
+      quantity: 0,
       status: "Agotado",
       skuCode: "SUC001",
     },
