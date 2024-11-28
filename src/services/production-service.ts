@@ -125,4 +125,3 @@ const handleJSONResponse = async (response: Response) => {
     throw new Error("Error al parsear JSON: " + (error?.message || String(error)));
   }
 };
-
