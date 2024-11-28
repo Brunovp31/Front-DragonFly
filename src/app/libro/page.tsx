@@ -909,6 +909,379 @@ const LibroReclamaciones = () => {
                           "Laraos", "Omas", "San Juan de Matraca"
                         ]);
                         break; 
+                        case "iquitos":
+                          setDistritos([
+                            "Iquitos", "Punchana", "Belén", "San Juan Bautista"
+                          ]);
+                          break;
+                        
+                        case "alto nanay":
+                          setDistritos([
+                            "Santa María", "San Juan de Sinchicuy", "Santa Cruz"
+                          ]);
+                          break;
+                        
+                        case "barranca alto":
+                          setDistritos([
+                            "Barranca", "Yurimaguas", "Tamshiyacu"
+                          ]);
+                          break;
+                        
+                        case "datem del marañón":
+                          setDistritos([
+                            "Barranca", "Manseriche", "Morona", "Pastaza", "Andoas", "Cahuapanas"
+                          ]);
+                          break;
+                        
+                        case "loreto":
+                          setDistritos([
+                            "Nauta", "Parinari", "Tigre", "Trompeteros", "Urarinas"
+                          ]);
+                          break;
+                        
+                        case "mariscal ramón castilla":
+                          setDistritos([
+                            "Caballo Cocha", "Pebas", "Yavari", "Raimondi"
+                          ]);
+                          break;
+                        
+                        case "requena":
+                          setDistritos([
+                            "Requena", "Alto Tapiche", "Capelo", "Emilio San Martín", "Maquía", 
+                            "Puínahua", "Saquena", "Soplin", "Tapiche", "Jenaro Herrera", "Yaquerana"
+                          ]);
+                          break;
+                        
+                        case "ucayali":
+                          setDistritos([
+                            "Contamana", "Inahuaya", "Padre Márquez", "Pampa Hermosa", "Sarayacu", 
+                            "Vargas Guerra"
+                          ]);
+                          break;
+                          case "tambopata":
+                            setDistritos([
+                              "Tambopata", "Inambari", "Las Piedras", "Laberinto"
+                            ]);
+                            break;
+                          
+                          case "manu":
+                            setDistritos([
+                              "Manu", "Fitzcarrald", "Madre de Dios", "Huepetuhe"
+                            ]);
+                            break;
+                          
+                          case "tahuamanu":
+                            setDistritos([
+                              "Iñapari", "Iberia", "Tahuamanu"
+                            ]);
+                            break;
+                            case "moquegua":
+                              setDistritos([
+                                "Moquegua", "Carumas", "Cuchumbaya", "Samegua", "San Cristóbal", "Torata"
+                              ]);
+                              break;
+                            
+                            case "ilo":
+                              setDistritos([
+                                "Ilo", "El Algarrobal", "Pacocha"
+                              ]);
+                              break;
+                            
+                            case "mariscal nieto":
+                              setDistritos([
+                                "Moquegua", "Carumas", "Cuchumbaya", "San Cristóbal", "Torata"
+                              ]);
+                              break;
+                    
+                              case "pasco":
+                                setDistritos([
+                                  "Chaupimarca", "Huachón", "Huariaca", "Huayllay", "Ninacaca", 
+                                  "Pallanchacra", "Paucartambo", "San Francisco de Asís de Yarusyacán", "Simón Bolívar", "Ticlacayán", "Tinyahuarco", "Vicco", "Yanacancha"
+                                ]);
+                                break;
+                              
+                              case "daniel alcides carrión":
+                                setDistritos([
+                                  "Yanahuanca", "Chacayan", "Goyllarisquizga", "Paucar", 
+                                  "San Pedro de Pillao", "Santa Ana de Tusi", "Tapuc", "Vilcabamba"
+                                ]);
+                                break;
+                              
+                              case "oxapampa":
+                                setDistritos([
+                                  "Oxapampa", "Chontabamba", "Huancabamba", "Palcazu", 
+                                  "Pozuzo", "Puerto Bermúdez", "Villa Rica", "Constitución"
+                                ]);
+                                break;
+                                case "piura":
+                                  setDistritos([
+                                    "Piura", "Castilla", "Catacaos", "Cura Mori", "El Tallán", 
+                                    "La Arena", "La Unión", "Las Lomas", "Tambo Grande"
+                                  ]);
+                                  break;
+                                
+                                case "ayabaca":
+                                  setDistritos([
+                                    "Ayabaca", "Frias", "Jilili", "Lagunas", "Montero", 
+                                    "Pacaipampa", "Paimas", "Sapillica", "Sicchez", "Suyo"
+                                  ]);
+                                  break;
+                                
+                                case "huancabamba":
+                                  setDistritos([
+                                    "Huancabamba", "Canchaque", "El Carmen de la Frontera", "Huarmaca", 
+                                    "Lalaquiz", "San Miguel de El Faique", "Sondor", "Sondorillo"
+                                  ]);
+                                  break;
+                                
+                                case "morropón":
+                                  setDistritos([
+                                    "Chulucanas", "Buenos Aires", "Chalaco", "La Matanza", 
+                                    "Morropon", "Salitral", "San Juan de Bigote", "Santa Catalina de Mossa", 
+                                    "Santo Domingo", "Yamango"
+                                  ]);
+                                  break;
+                                
+                                case "paita":
+                                  setDistritos([
+                                    "Paita", "Amotape", "Arenal", "Colán", "La Huaca", 
+                                    "Tamarindo", "Vichayal"
+                                  ]);
+                                  break;
+                                
+                                case "sullana":
+                                  setDistritos([
+                                    "Sullana", "Bellavista", "Ignacio Escudero", "Lancones", 
+                                    "Marcavelica", "Miguel Checa", "Querecotillo", "Salitral"
+                                  ]);
+                                  break;
+                                
+                                case "talara":
+                                  setDistritos([
+                                    "Talara", "El Alto", "La Brea", "Lobitos", "Los Órganos", "Máncora"
+                                  ]);
+                                  break;
+                                
+                                case "sechura":
+                                  setDistritos([
+                                    "Sechura", "Bellavista de la Unión", "Bernal", "Cristo Nos Valga", 
+                                    "Vice", "Rinconada Llicuar"
+                                  ]);
+                                  break;
+                                  case "puno":
+                                    setDistritos([
+                                      "Puno", "Acora", "Amantani", "Atuncolla", "Capachica", 
+                                      "Chucuito", "Coata", "Huata", "Mañazo", "Paucarcolla", 
+                                      "Pichacani", "Platería", "San Antonio", "Tiquillaca", "Vilque"
+                                    ]);
+                                    break;
+                                  
+                                  case "azángaro":
+                                    setDistritos([
+                                      "Azángaro", "Achaya", "Arapa", "Asillo", "Caminaca", 
+                                      "Chupa", "José Domingo Choquehuanca", "Muñani", "Potoni", 
+                                      "Saman", "San Anton", "San José", "San Juan de Salinas", 
+                                      "Santiago de Pupuja", "Tirapata"
+                                    ]);
+                                    break;
+                                  
+                                  case "carabaya":
+                                    setDistritos([
+                                      "Macusani", "Ajoyani", "Ayapata", "Coasa", "Corani", 
+                                      "Crucero", "Ituata", "Ollachea", "San Gaban", "Usicayos"
+                                    ]);
+                                    break;
+                                  
+                                  case "chucuito":
+                                    setDistritos([
+                                      "Juli", "Desaguadero", "Huacullani", "Kelluyo", "Pisacoma", 
+                                      "Pomata", "Zepita"
+                                    ]);
+                                    break;
+                                  
+                                  case "el collao":
+                                    setDistritos([
+                                      "Ilave", "Capaso", "Pilcuyo", "Santa Rosa", "Conduriri"
+                                    ]);
+                                    break;
+                                  
+                                  case "huancané":
+                                    setDistritos([
+                                      "Huancané", "Cojata", "Huatasani", "Inchupalla", "Pusi", 
+                                      "Rosaspata", "Taraco", "Vilque Chico"
+                                    ]);
+                                    break;
+                                  
+                                  case "lampa":
+                                    setDistritos([
+                                      "Lampa", "Cabanilla", "Calapuja", "Nicasio", "Ocuviri", 
+                                      "Palca", "Paratia", "Pucará", "Santa Lucía", "Vilavila"
+                                    ]);
+                                    break;
+                                  
+                                  case "melgar":
+                                    setDistritos([
+                                      "Ayaviri", "Antauta", "Cupi", "Llalli", "Macari", 
+                                      "Nuñoa", "Orurillo", "Santa Rosa", "Umachiri"
+                                    ]);
+                                    break;
+                                  
+                                  case "san antonio de putina":
+                                    setDistritos([
+                                      "Putina", "Ananea", "Pedro Vilca Apaza", "Quilcapuncu", "Sina"
+                                    ]);
+                                    break;
+                                  
+                                  case "san román":
+                                    setDistritos([
+                                      "Juliaca", "Cabana", "Cabanillas", "Caracoto"
+                                    ]);
+                                    break;
+                                  
+                                  case "sandia":
+                                    setDistritos([
+                                      "Sandia", "Cuyocuyo", "Limbani", "Patambuco", "Phara", 
+                                      "Quiaca", "San Juan del Oro", "Yanahuaya", "Alto Inambari"
+                                    ]);
+                                    break;
+                                  
+                                  case "yunguyo":
+                                    setDistritos([
+                                      "Yunguyo", "Anapia", "Copani", "Cuturapi", "Ollaraya", 
+                                      "Tinicachi", "Unicachi"
+                                    ]);
+                                    break;
+                                    case "moyobamba":
+                                      setDistritos([
+                                        "Moyobamba", "Calzada", "Soritor", "Yantalo", "San José de Sisa", 
+                                        "Huicungo", "San Martín de Sisa"
+                                      ]);
+                                      break;
+                                    
+                                    case "bellavista":
+                                      setDistritos([
+                                        "Bellavista", "Alonso de Alvarado", "San José de Sisa", "Tingo de Saposoa", 
+                                        "El Edén"
+                                      ]);
+                                      break;
+                                    
+                                    case "el-dorado":
+                                      setDistritos([
+                                        "San Vicente de Cañete", "La Merced", "San Ramón", "Valle de los ríos Apurímac, Ene y Mantaro (VRAEM)"
+                                      ]);
+                                      break;
+                                    
+                                    case "huallaga":
+                                      setDistritos([
+                                        "Juanjui", "Campanilla", "Huicungo", "San José de Sisa"
+                                      ]);
+                                      break;
+                                    
+                                    case "lamas":
+                                      setDistritos([
+                                        "Lamas", "Barranquita", "Cacatachi", "Pinto Recodo", "San Roque de Cumbaza", "Shanao"
+                                      ]);
+                                      break;
+                                    
+                                    case "mariscal-cáceres":
+                                      setDistritos([
+                                        "Juanjui", "Campanilla", "Huicungo", "San José de Sisa"
+                                      ]);
+                                      break;
+                                    
+                                    case "picota":
+                                      setDistritos([
+                                        "Picota", "El Porvenir", "Pillcopata", "Shatoja", "Vista Alegre"
+                                      ]);
+                                      break;
+                                    
+                                    case "rioja":
+                                      setDistritos([
+                                        "Rioja", "Nuevo Progreso", "San Fernando", "San Martín de los Andes", "Shumba"
+                                      ]);
+                                      break;
+                                    
+                                    case "san-martín":
+                                      setDistritos([
+                                        "San Martín", "Alianza", "San José", "Santa Teresa", "San Ignacio"
+                                      ]);
+                                      break;
+                                    
+                                    case "tocache":
+                                      setDistritos([
+                                        "Tocache", "Nueva Cajamarca", "Pucacaca", "San Alejandro", "Shumba"
+                                      ]);
+                                      break;
+                                      case "tacna":
+                                        setDistritos([
+                                          "Tacna", "Alto de la Alianza", "Calana", "Ciudad Nueva", "Inclán", "Pocollay", "Sama", "Coronel Gregorio Albarracín Lanchipa"
+                                        ]);
+                                        break;
+                                      
+                                      case "candarave":
+                                        setDistritos([
+                                          "Candarave", "Camilaca", "Chipalune", "Huarachullo", "Oros", "Punta de Bombón", "Quilahuani", "Yanque"
+                                        ]);
+                                        break;
+                                      
+                                      case "jorge-basadre":
+                                        setDistritos([
+                                          "Ite", "Los Palos", "Ticaco", "Viñani"
+                                        ]);
+                                        break;
+                                      
+                                      case "tarata":
+                                        setDistritos([
+                                          "Tarata", "Camilaca", "Esquivel", "Sivica"
+                                        ]);
+                                        break;
+                                        case "tumbes":
+                                          setDistritos([
+                                            "Tumbes", "Corrales", "La Cruz", "Pampa Grande", "San Jacinto", "San Juan de la Virgen", "Zorritos"
+                                          ]);
+                                          break;
+                                        
+                                        case "contralmirante-villar":
+                                          setDistritos([
+                                            "Zarumilla", "Aguas Verdes", "Canoas de Punta Sal", "Tumbes", "San Jacinto"
+                                          ]);
+                                          break;
+                                        
+                                        case "zarumilla":
+                                          setDistritos([
+                                            "Zarumilla", "Aguas Verdes", "Canoas de Punta Sal", "Tumbes", "San Jacinto"
+                                          ]);
+                                          break;
+                                          case "pucallpa":
+                                            setDistritos([
+                                              "Pucallpa", "Callería", "Yarinacocha", "Manantay", "Campo Verde", "Nueva Requena", "Curimana", "San Fernando"
+                                            ]);
+                                            break;
+                                          
+                                          case "atalaya":
+                                            setDistritos([
+                                              "Atalaya", "Junín de los Andes", "Manu", "Mazuco", "Shintuya"
+                                            ]);
+                                            break;
+                                          
+                                          case "coronel portillo":
+                                            setDistritos([
+                                              "Yarinacocha", "Manantay", "Campo Verde", "Nueva Requena"
+                                            ]);
+                                            break;
+
+                                      case "padre abad":
+                                        setDistritos([
+                                          "Padre Abad", "Irazola", "Río Tambo", "Carmen de la Legua"
+                                        ]);
+                                      break;
+                                          
+                                          case "purús":
+                                            setDistritos([
+                                              "Purús", "María", "Catarata"
+                                            ]);
+                                            break;
+                  
       default:
         setDistritos([]);
     }
