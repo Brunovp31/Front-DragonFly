@@ -189,8 +189,9 @@ export default function UsersDashboard() {
       <div className="mt-6 bg-gray-50 p-6 rounded-lg shadow-md">
         <h4 className="font-semibold text-xl text-gray-900 mb-4">Detalles del Cliente</h4>
         <p><strong className="text-gray-700">Nombre:</strong> {selectedOrder.user.firstName} {selectedOrder.user.lastName}</p>
-        <p><strong className="text-gray-700">Correo:</strong> {selectedOrder.user.email}</p>
+        <p><strong className="text-gray-700">Correo:</strong> {selectedOrder.user.username}</p>
         <p><strong className="text-gray-700">Teléfono:</strong> {selectedOrder.user.phone}</p>
+        <p><strong className="text-gray-700">Tipo de Documento:</strong> {selectedOrder.user.documentType}</p>
         <p><strong className="text-gray-700">Documento:</strong> {selectedOrder.user.documentNumber}</p>
         <p><strong className="text-gray-700">Dirección de Envío:</strong> {selectedOrder.shippingAddress}</p>
         <p><strong className="text-gray-700">Fecha de Entrega:</strong> {selectedOrder.deliveryDate}</p>
