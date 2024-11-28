@@ -172,7 +172,7 @@ const LibroReclamaciones = () => {
       default:        
         setProvincias([]);
     }
-      
+
     setDistritos([]);
   };
 
@@ -1269,7 +1269,6 @@ const LibroReclamaciones = () => {
                                               "Yarinacocha", "Manantay", "Campo Verde", "Nueva Requena"
                                             ]);
                                             break;
-
                                       case "padre abad":
                                         setDistritos([
                                           "Padre Abad", "Irazola", "Río Tambo", "Carmen de la Legua"
