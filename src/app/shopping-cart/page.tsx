@@ -270,88 +270,81 @@ export default function ShoppingCart() {
               </Select>
             </div>
 
-            <Input
-              label="Dirección de Envío"
-              name="shippingAddress"
-              value={customerDetails.shippingAddress}
-              onChange={handleInputChange}
-              required
-              className={fieldErrors.shippingAddress ? "border-red-500" : ""}
-            />
-
-            <div className="flex items-center gap-x-2">
-              <Input
-                type="checkbox"
-                checked={customerDetails.termsAccepted}
-                onChange={(e) => {
-                  setCustomerDetails((prevDetails) => ({
-                    ...prevDetails,
-                    termsAccepted: e.target.checked,
-                  }));
-                  setFieldErrors((prevErrors) => ({
-                    ...prevErrors,
-                    termsAccepted: !e.target.checked,
-                  }));
-                }}
-              />
-              <label>Acepto los términos y condiciones</label>
-            </div>
-
-            <div className="mt-6">
-              <button
-                type="button"
-                disabled={Object.values(fieldErrors).includes(true)}
-                className="bg-blue-600 text-white py-2 px-4 rounded-lg"
-                onClick={handleProceedToPayment}
-              >
-                Proceder al Pago
-              </button>
+            <div className="mb-6">
+              <Map />
             </div>
           </form>
         </div>
 
-        <div className="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-md">
-  <h2 className="text-2xl font-bold mb-4">Resumen de Pedido</h2>
-  <Table aria-label="Resumen de Carrito">
-    <TableHeader>
-      <TableColumn>Producto</TableColumn>
-      <TableColumn>Imagen</TableColumn>
-      <TableColumn>Cantidad</TableColumn>
-      <TableColumn>Subtotal</TableColumn>
-    </TableHeader>
-    <TableBody>
-      {cart.map((item, index) => (
-        <TableRow key={index}>
-          <TableCell>{item.productName}</TableCell>
-          <TableCell>
-            {item.productImage && (
-              <img
-                src={item.productImage}
-                alt={item.productName}
-                className="w-12 h-12 object-cover"
-              />
-            )}
-          </TableCell>
-          <TableCell>{item.quantity}</TableCell>
-          <TableCell>{(item.productPrice * item.quantity).toFixed(2)}</TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-  <div className="mt-4 flex justify-between">
-    <span>Subtotal:</span>
-    <span>S/ {subtotal.toFixed(2)}</span>
-  </div>
-  <div className="mt-2 flex justify-between">
-    <span>IGV (18%):</span>
-    <span>S/ {igv.toFixed(2)}</span>
-  </div>
-  <div className="mt-2 flex justify-between font-bold">
-    <span>Total:</span>
-    <span>S/ {total.toFixed(2)}</span>
-  </div>
-</div>
+        <div className="w-full md:w-1/3 bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Resumen de la Orden</h2>
+          <Table aria-label="Resumen de la Orden">
+            <TableHeader>
+              <TableColumn>Producto</TableColumn>
+              <TableColumn>Cantidad</TableColumn>
+              <TableColumn>Precio</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {cart.map((item) => (
+                <TableRow key={item.productId}>
+                  <TableCell>{item.productName}</TableCell>
+                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell>{item.productPrice}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <div className="flex justify-between mt-4">
+            <p>Subtotal:</p>
+            <p>S/ {subtotal.toFixed(2)}</p>
+          </div>
+          <div className="flex justify-between mt-2">
+            <p>IGV (18%):</p>
+            <p>S/ {igv.toFixed(2)}</p>
+          </div>
+          <div className="flex justify-between mt-4 font-bold">
+            <p>Total:</p>
+            <p>S/ {total.toFixed(2)}</p>
+          </div>
 
+          <div className="mt-4">
+            {loading ? (
+              <FlowerSpinner />
+            ) : (
+              <button
+                onClick={handleProceedToPayment}
+                disabled={!customerDetails.termsAccepted}
+                className="w-full bg-blue-500 text-white py-2 rounded-lg"
+              >
+                Proceder al Pago
+              </button>
+            )}
+          </div>
+
+          <div className="mt-6">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="termsAccepted"
+                checked={customerDetails.termsAccepted}
+                onChange={() =>
+                  setCustomerDetails((prev) => ({
+                    ...prev,
+                    termsAccepted: !prev.termsAccepted,
+                  }))
+                }
+                className="w-4 h-4"
+              />
+              Acepto los{" "}
+              <a href="/terminos" className="text-blue-500">
+                términos y condiciones
+              </a>
+            </label>
+            {fieldErrors.termsAccepted && (
+              <p className="text-red-500">Debe aceptar los términos.</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
