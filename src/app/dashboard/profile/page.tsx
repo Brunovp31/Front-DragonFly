@@ -1,16 +1,15 @@
 "use client";
+import { useAuth } from "@/app/context/auth-context";
+import { getUserByToken } from "@/services/auth-services";
 import { EditIcon } from "@/utils/icons/EditIcon";
 import { Button, Chip, Input, Tooltip } from "@nextui-org/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { BiSave } from "react-icons/bi";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/app/context/auth-context";
 
 const Profile = () => {
-  const router = useRouter();
-  const {user}=useAuth();
   const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,47 +18,43 @@ const Profile = () => {
     documentNumber: "",
     birthDate: "",
     address: "",
+    role: "",
   });
-console.log(user)
+
   useEffect(() => {
-    const fetchUserData = async () => {
+    const token = localStorage.getItem("token");
+    const handleGetUser = async () => {
       try {
-        const token = localStorage.getItem("token"); // Asumiendo que el token está guardado en localStorage
-        if (!token) {
-          router.push("/auth/login"); // Redirigir a login si no hay token
-          return;
-        }
-        
-        // Aquí, se hace la llamada al backend para obtener los datos del perfil
-        const response = await fetch("/auth/by-token/" + token, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Enviar el token en el header
-          },
-        });
+        setLoading(true);
+        const response = await getUserByToken(token);
+        console.log(response);
+        if (response !== null) {
+          const formattedBirthDate = response.birthDate
+            .split("-")
+            .reverse()
+            .join("-");
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch user data");
+          setFormData({
+            firstName: response.firstName,
+            lastName: response.lastName,
+            username: response.username,
+            documentType: response.documentType,
+            documentNumber: response.documentNumber,
+            birthDate: formattedBirthDate,
+            address: response.address,
+            role: response.role,
+          });
         }
-
-        const user = await response.json();
-        setFormData({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
-          documentType: user.documentType,
-          documentNumber: user.documentNumber,
-          birthDate: user.birthDate,
-          address: user.address,
-        });
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error getting user:", error);
+      } finally {
+        setLoading(false);
       }
     };
+    handleGetUser();
+  }, []);
 
-    fetchUserData();
-  }, [router]);
-
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -108,7 +103,7 @@ console.log(user)
               disabled={!edit}
               onChange={handleInputChange}
             />
-            <Chip color="secondary">Usuario</Chip>
+            <Chip color="secondary">{formData.role || "N/A"}</Chip>
           </div>
           <Input
             placeholder="Apellido"

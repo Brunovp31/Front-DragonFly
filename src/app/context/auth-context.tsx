@@ -28,7 +28,7 @@ const rolesAndPermissions: any = {
   WORKER: ["/dashboard", "/dashboard/categories", "/dashboard/products"],
   DELIVERY: ["/dashboard", "/dashboard/deliveries"],
   GARDENER: ["/dashboard", "/dashboard/productions"],
-  User: ["/dashboard","/dashboard/orders"]
+  User: ["/dashboard", "/dashboard/orders"],
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -78,14 +78,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("token", response);
 
       const decodedToken = JSON.parse(atob(response.split(".")[1]));
-      const user_id = await getUserByToken(response);
-      console.log (user_id)
+      const user = await getUserByToken(response);
+
       setUser({
         token: response,
-        user_id, // Guardar user_id aquí
+        user: user,
         ...decodedToken,
       });
-      setError(null); // Reset error if login is successful
+      setError(null);
 
       const defaultRoute = decodedToken.role.some(
         (r: any) => r.authority !== "USER"
@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       router.push(defaultRoute);
     } catch (error: any) {
       console.error("Error durante el login:", error);
-      setError(error.message); // Set error message
+      setError(error.message);
     }
   };
 
