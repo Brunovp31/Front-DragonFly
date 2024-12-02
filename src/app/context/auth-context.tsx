@@ -1,4 +1,5 @@
 import { getUserByToken, login } from "@/services/auth-services";
+import { User } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -27,6 +28,7 @@ const rolesAndPermissions: any = {
   WORKER: ["/dashboard", "/dashboard/categories", "/dashboard/products"],
   DELIVERY: ["/dashboard", "/dashboard/deliveries"],
   GARDENER: ["/dashboard", "/dashboard/productions"],
+  User: ["/dashboard","/dashboard/orders"]
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -77,6 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const decodedToken = JSON.parse(atob(response.split(".")[1]));
       const user_id = await getUserByToken(response);
+      console.log (user_id)
       setUser({
         token: response,
         user_id, // Guardar user_id aquí

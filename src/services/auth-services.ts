@@ -44,13 +44,24 @@ export const getAllUsers = async () => {
   }
 };
 
+// Implementación de getUserByToken
 export const getUserByToken = async (token: any) => {
   try {
-    const response = await fetch(`${BASE_URL}/by-token/${token}`);
-    const data = await response.json();
-    return data.id;
+    // La URL para el endpoint con el token
+    const response = await fetch(`${BASE_URL}/by-token/${token}`, {
+      method: "GET", // Método GET
+      headers: {
+        "Authorization": `Bearer ${token}`, // Pasamos el token en el header Authorization como Bearer token
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al obtener datos del usuario.");
+    }
+
+    const data = await response.json(); // Parseamos la respuesta JSON
   } catch (error) {
     console.error("Error al obtener datos de usuario:", error);
-    throw error;
+    throw error; 
   }
 };
