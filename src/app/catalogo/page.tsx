@@ -1,4 +1,4 @@
-"use client"; // Add this line to mark the component as a client component
+"use client"; 
 
 import React, { useEffect, useState, useMemo } from "react";
 import ProductCard from "@/components/product-card";
@@ -99,15 +99,16 @@ export default function Catalogo() {
   }
 
   return (
-    <main className="container mx-auto p-6">
-      <div className="flex flex-col sm:flex-row">
-        <aside className="w-full sm:w-1/4 pr-6 border-r border-gray-300 mb-6 sm:mb-0">
+    <main className="container mx-auto px-4 py-8">
+      <div className="flex flex-col md:flex-row">
+        {/* Sidebar */}
+        <aside className="w-full md:w-1/4 pr-8 mb-6 md:mb-0">
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categorías</h2>
-            <ul className="space-y-2 text-gray-600">
+            <h2 className="text-lg font-semibold mb-4 text-gray-700">Categorías</h2>
+            <ul className="space-y-2 text-gray-500">
               <li
                 onClick={() => setSelectedCategory(null)}
-                className={`cursor-pointer ${
+                className={`cursor-pointer hover:text-black ${
                   !selectedCategory ? "font-bold text-black" : ""
                 }`}
               >
@@ -117,7 +118,7 @@ export default function Catalogo() {
                 <li
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`cursor-pointer ${
+                  className={`cursor-pointer hover:text-black ${
                     selectedCategory === category ? "font-bold text-black" : ""
                   }`}
                 >
@@ -128,7 +129,7 @@ export default function Catalogo() {
           </div>
 
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Filtrar por Precio</h2>
+            <h2 className="text-lg font-semibold mb-4 text-gray-700">Filtrar por Precio</h2>
             <Range
               disabled={loading}
               values={priceRange}
@@ -140,15 +141,15 @@ export default function Catalogo() {
                 <div
                   {...props}
                   style={{
-                    height: "10px",
+                    height: "6px",
                     width: "100%",
                     background: getTrackBackground({
                       values: priceRange,
-                      colors: ["#ddd", "#007BFF", "#ddd"],
+                      colors: ["#ddd", "#4CAF50", "#ddd"],
                       min: MIN_PRICE,
                       max: MAX_PRICE,
                     }),
-                    borderRadius: "5px",
+                    borderRadius: "3px",
                   }}
                 >
                   {children}
@@ -158,17 +159,17 @@ export default function Catalogo() {
                 <div
                   {...props}
                   style={{
-                    height: "20px",
-                    width: "20px",
-                    backgroundColor: "#007BFF",
+                    height: "16px",
+                    width: "16px",
+                    backgroundColor: "#4CAF50",
                     borderRadius: "50%",
-                    boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.3)",
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
                   }}
                 />
               )}
             />
-            <div className="text-gray-600 mt-2">
-              Precio: S/ {priceRange[0]} — S/ {priceRange[1]}
+            <div className="text-sm text-gray-500 mt-2">
+              S/ {priceRange[0]} - S/ {priceRange[1]}
             </div>
           </div>
 
@@ -179,17 +180,18 @@ export default function Catalogo() {
               onChange={() => setShowRecommended(!showRecommended)}
               className="mr-2"
             />
-            <label>Mostrar productos recomendados</label>
+            <label className="text-gray-600">Mostrar productos recomendados</label>
           </div>
         </aside>
 
-        <section className="w-full sm:w-3/4 pl-6">
+        {/* Main Section */}
+        <section className="w-full md:w-3/4">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-800">Catálogo</h1>
+            <h1 className="text-2xl font-bold text-gray-800">Catálogo</h1>
             <select
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
-              className="border border-gray-300 rounded px-4 py-2"
+              className="border border-gray-300 rounded px-4 py-2 text-sm"
             >
               <option value="default">Ordenar por</option>
               <option value="low-to-high">Precio más bajo</option>
@@ -198,11 +200,11 @@ export default function Catalogo() {
             </select>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {paginatedProducts.length === 0 ? (
-              <div className="text-center text-gray-500">
+              <p className="text-center text-gray-500 col-span-full">
                 No hay productos disponibles
-              </div>
+              </p>
             ) : (
               paginatedProducts.map((product) => (
                 <ProductCard
@@ -218,21 +220,22 @@ export default function Catalogo() {
             )}
           </div>
 
-          <div className="flex justify-center mt-6">
+          {/* Pagination */}
+          <div className="flex justify-center mt-8">
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="mx-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm border rounded-lg text-gray-700 border-gray-300 hover:bg-gray-100 disabled:opacity-50"
             >
               Anterior
             </button>
-            <span className="mx-4 text-gray-700">
+            <span className="mx-4 text-gray-500 text-sm">
               Página {currentPage} de {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="mx-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm border rounded-lg text-gray-700 border-gray-300 hover:bg-gray-100 disabled:opacity-50"
             >
               Siguiente
             </button>
