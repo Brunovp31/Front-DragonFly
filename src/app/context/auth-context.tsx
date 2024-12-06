@@ -28,7 +28,7 @@ const rolesAndPermissions: any = {
   WORKER: ["/dashboard", "/dashboard/categories", "/dashboard/products"],
   DELIVERY: ["/dashboard", "/dashboard/deliveries"],
   GARDENER: ["/dashboard", "/dashboard/productions"],
-  User: ["/dashboard", "/dashboard/orders"],
+  USER: ["/dashboard", "/dashboard/orders"],
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({

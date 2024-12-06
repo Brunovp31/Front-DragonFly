@@ -27,7 +27,6 @@ const Profile = () => {
       try {
         setLoading(true);
         const response = await getUserByToken(token);
-        console.log(response);
         if (response !== null) {
           const formattedBirthDate = response.birthDate
             .split("-")
@@ -62,7 +61,14 @@ const Profile = () => {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("/auth/update/" + token, {
+      if (!token) {
+        throw new Error("Token no encontrado");
+      }
+
+      // Obtener el userId desde el token
+      const userId = await getUserByToken(token);
+
+      const response = await fetch(`/auth/update/${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -72,12 +78,15 @@ const Profile = () => {
       });
 
       if (response.ok) {
-        alert("Profile updated successfully");
+        alert("Perfil actualizado correctamente");
       } else {
-        alert("Failed to update profile");
+        const errorData = await response.json();
+        console.error("Error en la actualización:", errorData);
+        alert("Error al actualizar el perfil: " + errorData.message);
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("Error al actualizar perfil:", error);
+      alert("Error al actualizar el perfil. Ver consola para más detalles.");
     }
   };
 
